@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const uuidv4 = require('uuid/v4');
 
 const app = express();
+app.use(bodyParser.json());
 
 // Base de datos en memoria
 const productos = [
