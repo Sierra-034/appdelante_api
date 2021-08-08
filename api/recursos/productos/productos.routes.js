@@ -4,62 +4,61 @@ const uuidv4 = require('uuid/v4');
 
 const productosRouter = express.Router();
 
-productosRouter.route('/')
-    .get((request, response) => {
-        response.json(productos);
-    })
-    .post((request, response) => {
-        let nuevoProducto = request.body;
-        if (!nuevoProducto.titulo || !nuevoProducto.precio || !nuevoProducto.moneda) {
-            response.status(400).send('Tu producto debe especificar un título, precio y moneda');
-            return;
-        }
+productosRouter.get('/', (request, response) => {
+    response.json(productos);
+});
 
-        nuevoProducto.id = uuidv4();
-        productos.push(nuevoProducto);
-        response.status(201).json(nuevoProducto);
-    });
+productosRouter.post('/', (request, response) => {
+    let nuevoProducto = request.body;
+    if (!nuevoProducto.titulo || !nuevoProducto.precio || !nuevoProducto.moneda) {
+        response.status(400).send('Tu producto debe especificar un título, precio y moneda');
+        return;
+    }
 
-productosRouter.route('/:id')
-    .get((request, response) => {
-        for (let producto of productos) {
-            if (producto.id == request.params.id) {
-                response.json(producto);
-                return;
-            }
-        }
+    nuevoProducto.id = uuidv4();
+    productos.push(nuevoProducto);
+    response.status(201).json(nuevoProducto);
+});
 
+productosRouter.get('/:id', (request, response) => {
+    const id = request.params.id;
+    const indexToResponse = productos.findIndex(producto => producto.id === id);
+    if (indexToResponse === -1) {
         response.status(404).send(`El producto con id [${request.params.id}] no existe`);
-    })
-    .put((request, response) => {
-        let id = request.params.id;
-        let productReplacer = request.body;
+        return;
+    }
 
-        if (!productReplacer.titulo || !productReplacer.precio || !productReplacer.moneda) {
-            response.status(400).send('Tu producto debe especificar un título, precio y moneda');
-            return;
-        }
-        
-        let index = productos.findIndex(producto => producto.id == id);
+    const productToResponse = productos[indexToResponse];
+    response.status(200).json(productToResponse);
+});
 
-        if(index !== -1) {
-            productReplacer.id = id;
-            productos[index] = productReplacer;
-            response.status(200).json(productReplacer);
-            return;
-        } else {
-            response.status(404).send(`El producto con id [${id}] no existe`);
-        }
-    })
-    .delete((request, response) => {
-        let indexToDelete = productos.findIndex(producto => producto.id === request.params.id);
-        if(indexToDelete === -1) {
-            response.status(404).send(`Producto con id [${request.params.id}] no existe. Nada que borrar.`);
-            return;
-        }
+productosRouter.put('/:id', (request, response) => {
+    const idToReplace = productos.findIndex(producto => producto.id === request.params.id);
+    if (idToReplace === -1) {
+        response.status(404).send(`El producto con id [${request.params.id}] no existe`);
+        return;
+    }
 
-        let borrado = productos.splice(indexToDelete, 1);
-        response.status(200).json(borrado);
-    });
+    const productReplacer = request.body;
+    if (!productReplacer.titulo || !productReplacer.precio || !productReplacer.moneda) {
+        response.status(400).send('Tu producto debe especificar un título, precio y moneda');
+        return;
+    }
+
+    productReplacer.id = request.params.id;
+    productos[idToReplace] = productReplacer;
+    response.status(200).json(productReplacer);
+});
+
+productosRouter.delete('/:id', (request, response) => {
+    const idToDelete = productos.findIndex(producto => producto.id === request.params.id);
+    if (idToDelete === -1) {
+        response.status(404).send(`El producto con id [${request.params.id}] no existe. Nada que`);
+        return;
+    }
+
+    const deletedProduct = productos.splice(idToDelete, 1);
+    response.status(200).json(deletedProduct);
+});
 
 module.exports = productosRouter;
