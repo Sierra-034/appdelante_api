@@ -1,16 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const uuidv4 = require('uuid/v4');
+const productos = require('./database').productos;
 
 const app = express();
 app.use(bodyParser.json());
-
-// Base de datos en memoria
-const productos = [
-    { id: '123123', titulo: 'macbook pro 13 inches', precio: 1300, moneda: 'USD' },
-    { id: 'aa12ab', titulo: 'Taza de café', precio: 10, moneda: 'USD' },
-    { id: 'kfhdg2', titulo: 'microfono blue yeti', precio: 100, moneda: 'USD' }
-];
 
 app.route('/productos')
     .get((request, response) => {
