@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const uuidv4 = require('uuid/v4');
 
 const app = express();
 
@@ -13,6 +14,17 @@ const productos = [
 app.route('/productos')
     .get((request, response) => {
         response.json(productos);
+    })
+    .post((request, response) => {
+        let nuevoProducto = request.body;
+        if(!nuevoProducto.titulo || !nuevoProducto.precio || !nuevoProducto.moneda) {
+            response.status(400).send('Tu producto debe especificar un título, precio y moneda');
+            return;
+        }
+
+        nuevoProducto.id = uuidv4();
+        productos.push(nuevoProducto);
+        response.status(201).json(nuevoProducto);
     });
 
 app.get('/productos/:id', (request, response) => {
