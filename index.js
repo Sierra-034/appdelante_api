@@ -58,6 +58,16 @@ app.route('/productos/:id')
         } else {
             response.status(404).send(`El producto con id [${id}] no existe`);
         }
+    })
+    .delete((request, response) => {
+        let indexToDelete = productos.findIndex(producto => producto.id === request.params.id);
+        if(indexToDelete === -1) {
+            response.status(404).send(`Producto con id [${request.params.id}] no existe. Nada que borrar.`);
+            return;
+        }
+
+        let borrado = productos.splice(indexToDelete, 1);
+        response.status(200).json(borrado);
     });
 
 app.get('/', (request, response) => {
