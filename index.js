@@ -18,7 +18,7 @@ app.route('/productos')
     })
     .post((request, response) => {
         let nuevoProducto = request.body;
-        if(!nuevoProducto.titulo || !nuevoProducto.precio || !nuevoProducto.moneda) {
+        if (!nuevoProducto.titulo || !nuevoProducto.precio || !nuevoProducto.moneda) {
             response.status(400).send('Tu producto debe especificar un título, precio y moneda');
             return;
         }
@@ -28,16 +28,37 @@ app.route('/productos')
         response.status(201).json(nuevoProducto);
     });
 
-app.get('/productos/:id', (request, response) => {
-    for(let producto of productos) {
-        if(producto.id == request.params.id) {
-            response.json(producto);
-            return
-        }
+app.route('/productos/:id')
+    .get((request, response) => {
+        for (let producto of productos) {
+            if (producto.id == request.params.id) {
+                response.json(producto);
+                return
+            }
 
-        response.status(404).send(`El producto con id [${request.params.id}] no existe`);
-    }
-});
+            response.status(404).send(`El producto con id [${request.params.id}] no existe`);
+        }
+    })
+    .put((request, response) => {
+        let id = request.params.id;
+        let productReplacer = request.body;
+
+        if (!productReplacer.titulo || !productReplacer.precio || !productReplacer.moneda) {
+            response.status(400).send('Tu producto debe especificar un título, precio y moneda');
+            return;
+        }
+        
+        let index = productos.findIndex(producto => producto.id == id);
+
+        if(index !== -1) {
+            productReplacer.id = id;
+            productos[index] = productReplacer;
+            response.status(200).json(productReplacer);
+            return;
+        } else {
+            response.status(404).send(`El producto con id [${id}] no existe`);
+        }
+    });
 
 app.get('/', (request, response) => {
     response.send('API de appdelante');
