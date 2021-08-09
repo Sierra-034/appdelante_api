@@ -1,20 +1,20 @@
 const express = require('express');
 const productos = require('../../../database').productos;
 const uuidv4 = require('uuid/v4');
-const Joi = require('joi');
+const Joi = require('@hapi/joi');
 
 const productosRouter = express.Router();
 
-const blueprintProducto = Joi.object().keys({
+const blueprintProducto = Joi.object({
     titulo: Joi.string().max(100).required(),
     precio: Joi.number().positive().precision(2).required(),
     moneda: Joi.string().length(3).uppercase()
 });
 
 const validarProducto = (request, response, next) => {
-    const validationResult = Joi.validate(request.body, blueprintProducto, { abortEarly: false, convert: false });
-    if (validationResult.error !== null) {
-        
+    const validationResult = blueprintProducto.validate(request.body, { abortEarly: false, convert: false });
+    if (validationResult.error !== undefined) {
+
         const validationErrors = validationResult.error.details.reduce((accumulator, error) => {
             return accumulator += `[${error.message}]\n`;
         }, "\n\t");
