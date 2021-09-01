@@ -1,0 +1,5 @@
+info: 2021-09-01T07:47:55.464Z /Users/sgomezb/Documents/nodejs-apps/appdelante_api
+info: 2021-09-01T07:47:55.465Z Hola, soy logger {"compania":"appdelante"}
+error: 2021-09-01T07:47:55.465Z Algo explotó
+warn: 2021-09-01T07:47:55.465Z Algo inesperado ocurrió
+info: 2021-09-01T07:48:47.867Z Escuchando en el puerto 3000.
