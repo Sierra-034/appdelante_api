@@ -1,5 +1,6 @@
 const Joi = require('@hapi/joi');
 const productos = require('../../../database').productos;
+const logger = require('../../../utils/logger');
 
 const blueprintProducto = Joi.object({
     titulo: Joi.string().max(100).required(),
@@ -10,6 +11,7 @@ const blueprintProducto = Joi.object({
 const validateExistance = (request, response, next) => {
     const indexToLook = productos.findIndex(producto => producto.id === request.params.id);
     if (indexToLook === -1) {
+        logger.warn(`El producto con id [${request.params.id}] no fué encontrado`);
         response.status(404).send(`El producto con id [${request.params.id}] no fué encontrado`);
         return;
     }
@@ -25,6 +27,7 @@ const validateProduct = (request, response, next) => {
             return accumulator += `[${error.message}]\n`;
         }, "\n\t");
 
+        logger.warn('El siguiente producto no pasó la validación', request.body, validationErrors);
         response.status(400).send(`Tu producto en el body debe especificar un título, precio y moneda: ${validationErrors}`);
         return;
     }

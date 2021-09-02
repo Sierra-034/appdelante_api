@@ -2,6 +2,7 @@ const express = require('express');
 const productos = require('../../../database').productos;
 const uuidv4 = require('uuid/v4');
 const validators = require('./productos.validate');
+const logger = require('../../../utils/logger');
 
 const productosRouter = express.Router();
 
@@ -11,6 +12,7 @@ productosRouter.post('/', validators.validateProduct, (request, response) => {
     let nuevoProducto = request.body;
     nuevoProducto.id = uuidv4();
     productos.push(nuevoProducto);
+    logger.info('Producto agregado a la colección productos', nuevoProducto);
     response.status(201).json(nuevoProducto);
 });
 
@@ -29,6 +31,7 @@ productosRouter.put(
         
         productReplacer.id = request.params.id;
         productos[idToReplace] = productReplacer;
+        logger.info(`Producto con id [${request.params.id}] fué reemplazado con nuevo producto`, productReplacer);
         response.status(200).json(productReplacer);
     });
 

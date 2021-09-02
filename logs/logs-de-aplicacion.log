@@ -34,3 +34,35 @@ info: 2021-09-02T01:52:13.761Z ::1 - POST /productos HTTP/1.1 400 166 - 3.276 ms
 
 info: 2021-09-02T01:52:36.747Z ::1 - POST /productos HTTP/1.1 201 96 - 0.845 ms
 
+info: 2021-09-02T02:32:19.299Z Escuchando en el puerto 3000.
+info: 2021-09-02T02:33:26.115Z Escuchando en el puerto 3000.
+info: 2021-09-02T02:33:42.620Z Producto agregado a la colección productos {"titulo":"Teléfono","precio":20.24,"moneda":"CAD","id":"0cee7212-5832-4128-bdcd-b77bf98bf1e7"}
+info: 2021-09-02T02:33:42.633Z ::1 - POST /productos HTTP/1.1 201 96 - 6.175 ms
+
+info: 2021-09-02T02:35:43.901Z Escuchando en el puerto 3000.
+info: 2021-09-02T02:35:53.722Z ::1 - PUT /productos/8d684e37-17d6-44e3-8926-2ccaa043b2b3 HTTP/1.1 404 76 - 2.301 ms
+
+info: 2021-09-02T02:35:59.271Z ::1 - GET /productos HTTP/1.1 200 222 - 0.580 ms
+
+info: 2021-09-02T02:36:08.552Z Producto con id kfhdg2 fué reemplazado con nuevo producto {"titulo":"Zapatos nike zoom fly","precio":100,"moneda":"USD","id":"kfhdg2"}
+info: 2021-09-02T02:36:08.552Z ::1 - PUT /productos/kfhdg2 HTTP/1.1 200 76 - 2.373 ms
+
+info: 2021-09-02T02:36:38.791Z Escuchando en el puerto 3000.
+info: 2021-09-02T02:36:43.727Z Producto con id [kfhdg2] fué reemplazado con nuevo producto {"titulo":"Zapatos nike zoom fly","precio":100,"moneda":"USD","id":"kfhdg2"}
+info: 2021-09-02T02:36:43.735Z ::1 - PUT /productos/kfhdg2 HTTP/1.1 200 76 - 6.217 ms
+
+info: 2021-09-02T02:39:48.361Z Escuchando en el puerto 3000.
+info: 2021-09-02T02:41:47.023Z Escuchando en el puerto 3000.
+info: 2021-09-02T02:42:04.341Z Escuchando en el puerto 3000.
+info: 2021-09-02T02:42:18.082Z ::1 - DELETE /productos/123123 HTTP/1.1 200 79 - 2.848 ms
+
+warn: 2021-09-02T02:42:22.466Z El producto con id [123123] no fué encontrado
+info: 2021-09-02T02:42:22.469Z ::1 - DELETE /productos/123123 HTTP/1.1 404 46 - 0.948 ms
+
+info: 2021-09-02T02:44:17.286Z Escuchando en el puerto 3000.
+info: 2021-09-02T02:45:05.827Z ::1 - POST /productos HTTP/1.1 500 1543 - 5.064 ms
+
+info: 2021-09-02T02:45:18.767Z Escuchando en el puerto 3000.
+warn: 2021-09-02T02:45:22.658Z El siguiente producto no pasó la validación {"titulo":"Teléfono","precio":20.244,"moneda":"CAD"}
+info: 2021-09-02T02:45:22.669Z ::1 - POST /productos HTTP/1.1 400 122 - 5.874 ms
+
