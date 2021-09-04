@@ -299,3 +299,5 @@ info: 2021-09-03T05:41:21.769Z ::1 - GET / HTTP/1.1 200 17 - 3.463 ms
 
 info: 2021-09-04T07:59:33.464Z Escuchando en el puerto 3000.
 info: 2021-09-04T08:00:12.018Z Escuchando en el puerto 3000.
+info: 2021-09-04T08:07:14.481Z Escuchando en el puerto 3000.
+info: 2021-09-04T08:07:31.334Z Escuchando en el puerto 3000.
