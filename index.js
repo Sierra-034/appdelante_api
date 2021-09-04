@@ -3,6 +3,18 @@ const bodyParser = require('body-parser');
 const productosRouter = require('./api/recursos/productos/productos.routes');
 const logger = require('./utils/logger');
 const morgan = require('morgan');
+const passport = require('passport');
+const BasicStrategy = require('passport-http').BasicStrategy;
+
+passport.use(new BasicStrategy(
+    (username, password, done) => {
+        if(username.valueOf() === 'sam' && password.valueOf() === 'sam123') {
+            return done(null, true);
+        } else {
+            return done(null, false);
+        }
+    }
+));
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,9 +24,10 @@ app.use(morgan('short', {
     }
 }));
 
+app.use(passport.initialize());
 app.use('/productos', productosRouter);
 
-app.get('/', (request, response) => {
+app.get('/', passport.authenticate('basic', { session: false }), (request, response) => {
     response.send('API de appdelante');
 });
 

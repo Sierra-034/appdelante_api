@@ -66,3 +66,236 @@ info: 2021-09-02T02:45:18.767Z Escuchando en el puerto 3000.
 warn: 2021-09-02T02:45:22.658Z El siguiente producto no pasó la validación {"titulo":"Teléfono","precio":20.244,"moneda":"CAD"}
 info: 2021-09-02T02:45:22.669Z ::1 - POST /productos HTTP/1.1 400 122 - 5.874 ms
 
+info: 2021-09-02T14:37:03.230Z ::1 - GET /static/js/bundle.js HTTP/1.1 404 158 - 114.471 ms
+
+info: 2021-09-02T14:37:03.234Z ::1 - GET /main.265a2f29251780aa333d.hot-update.js HTTP/1.1 404 178 - 0.558 ms
+
+info: 2021-09-02T14:37:03.235Z ::1 - GET /static/js/main.chunk.js HTTP/1.1 404 162 - 0.226 ms
+
+info: 2021-09-02T14:37:03.328Z ::1 - GET /static/js/0.chunk.js HTTP/1.1 404 159 - 0.612 ms
+
+info: 2021-09-02T14:37:03.338Z ::1 - GET /static/js/main.chunk.js HTTP/1.1 404 162 - 0.848 ms
+
+info: 2021-09-02T14:37:03.359Z ::1 - GET /main.265a2f29251780aa333d.hot-update.js HTTP/1.1 404 178 - 12.604 ms
+
+info: 2021-09-02T14:37:03.382Z ::1 - GET /manifest.json HTTP/1.1 404 152 - 0.368 ms
+
+info: 2021-09-03T03:56:17.586Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:18:39.844Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:19:43.645Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:21:15.744Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:21:27.978Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:21:47.181Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:21:59.813Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:33:13.095Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:33:19.051Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:33:38.458Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:33:55.483Z ::1 - GET / HTTP/1.1 200 17 - 2.318 ms
+
+info: 2021-09-03T04:34:01.775Z ::1 - GET /productos HTTP/1.1 200 222 - 0.578 ms
+
+info: 2021-09-03T04:35:03.020Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:35:09.887Z ::1 - GET /productos HTTP/1.1 304 - - 2.677 ms
+
+info: 2021-09-03T04:35:10.388Z ::1 - GET /favicon.ico HTTP/1.1 404 150 - 1.310 ms
+
+info: 2021-09-03T04:35:12.470Z ::1 - GET / HTTP/1.1 401 - - 0.777 ms
+
+info: 2021-09-03T04:35:18.114Z ::1 w GET / HTTP/1.1 401 - - 2.072 ms
+
+info: 2021-09-03T04:35:21.192Z ::1 sam GET / HTTP/1.1 401 - - 0.964 ms
+
+info: 2021-09-03T04:35:25.662Z ::1 sam GET / HTTP/1.1 401 - - 0.302 ms
+
+info: 2021-09-03T04:35:29.291Z ::1 sam GET / HTTP/1.1 304 - - 0.889 ms
+
+info: 2021-09-03T04:36:20.891Z ::1 - GET / HTTP/1.1 401 - - 0.181 ms
+
+info: 2021-09-03T04:36:34.480Z ::1 sam GET / HTTP/1.1 304 - - 0.970 ms
+
+info: 2021-09-03T04:36:37.796Z ::1 sam GET / HTTP/1.1 304 - - 0.448 ms
+
+info: 2021-09-03T04:36:38.942Z ::1 sam GET / HTTP/1.1 304 - - 0.401 ms
+
+info: 2021-09-03T04:36:39.772Z ::1 sam GET / HTTP/1.1 304 - - 0.476 ms
+
+info: 2021-09-03T04:36:40.140Z ::1 sam GET / HTTP/1.1 304 - - 0.437 ms
+
+info: 2021-09-03T04:36:54.427Z ::1 sam GET / HTTP/1.1 304 - - 0.371 ms
+
+info: 2021-09-03T04:37:34.903Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:37:47.437Z ::1 sam GET / HTTP/1.1 304 - - 5.426 ms
+
+info: 2021-09-03T04:38:21.171Z ::1 sam GET /productos HTTP/1.1 304 - - 0.586 ms
+
+info: 2021-09-03T04:39:18.170Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:39:22.380Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:39:25.416Z ::1 sam GET /productos HTTP/1.1 304 - - 2.320 ms
+
+info: 2021-09-03T04:39:33.887Z ::1 sam GET / HTTP/1.1 304 - - 0.493 ms
+
+info: 2021-09-03T04:40:01.057Z ::1 - GET / HTTP/1.1 200 17 - 0.610 ms
+
+info: 2021-09-03T04:41:14.547Z ::1 - GET /productos HTTP/1.1 200 222 - 0.265 ms
+
+info: 2021-09-03T04:41:36.387Z Escuchando en el puerto 3000.
+info: 2021-09-03T04:41:39.331Z ::1 - GET /productos HTTP/1.1 304 - - 2.264 ms
+
+info: 2021-09-03T04:41:58.071Z ::1 - GET / HTTP/1.1 401 - - 0.673 ms
+
+info: 2021-09-03T04:42:11.260Z ::1 sam GET / HTTP/1.1 304 - - 2.689 ms
+
+info: 2021-09-03T04:42:35.006Z ::1 sam GET / HTTP/1.1 304 - - 0.965 ms
+
+info: 2021-09-03T04:44:26.719Z ::1 - GET / HTTP/1.1 401 - - 0.133 ms
+
+info: 2021-09-03T04:44:32.454Z ::1 - GET / HTTP/1.1 401 - - 0.227 ms
+
+info: 2021-09-03T04:44:41.329Z ::1 - GET / HTTP/1.1 401 - - 0.145 ms
+
+info: 2021-09-03T04:44:42.741Z ::1 - GET / HTTP/1.1 401 - - 0.178 ms
+
+info: 2021-09-03T04:45:22.821Z ::1 - GET /productos HTTP/1.1 200 222 - 0.372 ms
+
+info: 2021-09-03T04:45:38.927Z ::1 - GET / HTTP/1.1 401 - - 0.123 ms
+
+info: 2021-09-03T04:45:41.844Z ::1 - GET / HTTP/1.1 401 - - 0.125 ms
+
+info: 2021-09-03T04:45:48.666Z ::1 - GET / HTTP/1.1 401 - - 0.117 ms
+
+info: 2021-09-03T04:45:54.413Z ::1 - GET / HTTP/1.1 401 - - 0.128 ms
+
+info: 2021-09-03T04:46:38.957Z ::1 - GET / HTTP/1.1 401 - - 0.135 ms
+
+info: 2021-09-03T04:46:40.606Z ::1 - GET / HTTP/1.1 401 - - 0.122 ms
+
+info: 2021-09-03T04:47:38.798Z ::1 - GET / HTTP/1.1 401 - - 0.114 ms
+
+info: 2021-09-03T04:47:43.551Z ::1 sam GET / HTTP/1.1 401 - - 0.271 ms
+
+info: 2021-09-03T04:47:45.673Z ::1 - GET / HTTP/1.1 401 - - 0.118 ms
+
+info: 2021-09-03T04:49:51.911Z ::1 - GET / HTTP/1.1 401 - - 0.122 ms
+
+info: 2021-09-03T04:49:55.658Z ::1 sam GET / HTTP/1.1 200 17 - 0.364 ms
+
+info: 2021-09-03T05:05:52.196Z Escuchando en el puerto 3000.
+info: 2021-09-03T05:05:58.110Z Escuchando en el puerto 3000.
+info: 2021-09-03T05:07:02.715Z Escuchando en el puerto 3000.
+info: 2021-09-03T05:07:13.789Z ::1 sam GET / HTTP/1.1 401 - - 1.449 ms
+
+info: 2021-09-03T05:07:16.185Z ::1 - GET / HTTP/1.1 401 - - 0.286 ms
+
+info: 2021-09-03T05:07:19.619Z ::1 - GET / HTTP/1.1 401 - - 0.162 ms
+
+info: 2021-09-03T05:07:21.889Z ::1 - GET / HTTP/1.1 401 - - 0.122 ms
+
+info: 2021-09-03T05:07:53.333Z ::1 - GET / HTTP/1.1 401 - - 0.161 ms
+
+info: 2021-09-03T05:08:01.329Z sam
+info: 2021-09-03T05:08:01.330Z ::1 - GET / HTTP/1.1 401 - - 1.304 ms
+
+info: 2021-09-03T05:08:04.395Z ::1 - GET / HTTP/1.1 401 - - 0.163 ms
+
+info: 2021-09-03T05:09:41.111Z ::1 - GET / HTTP/1.1 401 - - 0.126 ms
+
+info: 2021-09-03T05:09:42.649Z ::1 - GET / HTTP/1.1 401 - - 0.267 ms
+
+info: 2021-09-03T05:09:45.001Z ::1 - GET / HTTP/1.1 401 - - 0.150 ms
+
+info: 2021-09-03T05:09:51.022Z sam
+warn: 2021-09-03T05:09:51.023Z sam
+info: 2021-09-03T05:09:51.025Z ::1 - GET / HTTP/1.1 304 - - 2.382 ms
+
+info: 2021-09-03T05:15:50.510Z sam
+warn: 2021-09-03T05:15:50.510Z sam
+info: 2021-09-03T05:15:50.511Z ::1 - GET / HTTP/1.1 304 - - 0.950 ms
+
+info: 2021-09-03T05:15:55.424Z sam
+warn: 2021-09-03T05:15:55.424Z sam
+info: 2021-09-03T05:15:55.425Z ::1 - GET / HTTP/1.1 304 - - 0.852 ms
+
+info: 2021-09-03T05:16:09.615Z ::1 - GET / HTTP/1.1 401 - - 0.130 ms
+
+info: 2021-09-03T05:16:12.195Z ::1 - GET / HTTP/1.1 401 - - 0.259 ms
+
+info: 2021-09-03T05:16:20.720Z ::1 - GET / HTTP/1.1 401 - - 0.126 ms
+
+info: 2021-09-03T05:16:22.015Z ::1 - GET / HTTP/1.1 401 - - 0.130 ms
+
+info: 2021-09-03T05:16:41.070Z ::1 - GET / HTTP/1.1 401 - - 0.126 ms
+
+info: 2021-09-03T05:16:52.956Z sa
+info: 2021-09-03T05:16:52.956Z ::1 - GET / HTTP/1.1 401 - - 0.385 ms
+
+info: 2021-09-03T05:16:54.593Z ::1 - GET / HTTP/1.1 401 - - 0.132 ms
+
+info: 2021-09-03T05:36:05.550Z Escuchando en el puerto 3000.
+info: 2021-09-03T05:36:14.879Z ::1 - GET / HTTP/1.1 401 - - 1.782 ms
+
+info: 2021-09-03T05:36:31.521Z ::1 - GET / HTTP/1.1 401 - - 0.267 ms
+
+info: 2021-09-03T05:36:48.597Z ::1 - GET / HTTP/1.1 401 - - 0.144 ms
+
+info: 2021-09-03T05:36:56.419Z sa
+info: 2021-09-03T05:36:56.421Z ::1 - GET / HTTP/1.1 401 - - 1.333 ms
+
+info: 2021-09-03T05:37:00.671Z ::1 - GET / HTTP/1.1 401 - - 0.140 ms
+
+info: 2021-09-03T05:37:29.201Z Escuchando en el puerto 3000.
+info: 2021-09-03T05:37:33.374Z ::1 - GET / HTTP/1.1 401 - - 1.281 ms
+
+info: 2021-09-03T05:37:36.709Z sa
+info: 2021-09-03T05:37:36.710Z ::1 - GET / HTTP/1.1 401 - - 1.304 ms
+
+info: 2021-09-03T05:37:37.944Z ::1 - GET / HTTP/1.1 401 - - 0.167 ms
+
+info: 2021-09-03T05:38:06.715Z Escuchando en el puerto 3000.
+info: 2021-09-03T05:38:11.326Z ::1 - GET / HTTP/1.1 401 - - 1.195 ms
+
+info: 2021-09-03T05:38:16.300Z sa
+info: 2021-09-03T05:38:16.301Z ::1 - GET / HTTP/1.1 401 - - 1.459 ms
+
+info: 2021-09-03T05:38:17.349Z ::1 - GET / HTTP/1.1 401 - - 0.146 ms
+
+info: 2021-09-03T05:38:45.238Z Escuchando en el puerto 3000.
+info: 2021-09-03T05:38:49.002Z ::1 - GET / HTTP/1.1 401 - - 1.285 ms
+
+info: 2021-09-03T05:38:52.433Z digest
+info: 2021-09-03T05:38:52.434Z ::1 - GET / HTTP/1.1 401 - - 1.430 ms
+
+info: 2021-09-03T05:38:53.591Z ::1 - GET / HTTP/1.1 401 - - 0.153 ms
+
+info: 2021-09-03T05:39:06.880Z ::1 - GET / HTTP/1.1 401 - - 0.170 ms
+
+info: 2021-09-03T05:39:14.361Z digest
+info: 2021-09-03T05:39:14.361Z info params {"nonce":"7lSr14QRtw0edIqaqWfwWvzc6waq5iDL","cnonce":"b02715b7f0d114ec","nc":"00000002"}
+info: 2021-09-03T05:39:14.362Z ::1 - GET / HTTP/1.1 401 - - 1.058 ms
+
+info: 2021-09-03T05:39:15.852Z ::1 - GET / HTTP/1.1 401 - - 0.145 ms
+
+info: 2021-09-03T05:40:30.106Z ::1 - GET / HTTP/1.1 401 - - 0.180 ms
+
+info: 2021-09-03T05:40:35.842Z digest
+info: 2021-09-03T05:40:35.842Z ::1 - GET / HTTP/1.1 401 - - 0.517 ms
+
+info: 2021-09-03T05:40:37.035Z ::1 - GET / HTTP/1.1 401 - - 0.145 ms
+
+info: 2021-09-03T05:40:55.893Z ::1 - GET / HTTP/1.1 401 - - 0.120 ms
+
+info: 2021-09-03T05:40:59.958Z digest
+info: 2021-09-03T05:40:59.958Z info params {"nonce":"bMx5BcOypzW4hJb9ghz7f6C3TraU5kJa","cnonce":"b45498944d679ba2","nc":"00000002"}
+info: 2021-09-03T05:40:59.958Z ::1 - GET / HTTP/1.1 401 - - 0.684 ms
+
+info: 2021-09-03T05:41:01.172Z ::1 - GET / HTTP/1.1 401 - - 0.142 ms
+
+info: 2021-09-03T05:41:13.800Z Escuchando en el puerto 3000.
+info: 2021-09-03T05:41:16.981Z ::1 - GET / HTTP/1.1 401 - - 1.317 ms
+
+info: 2021-09-03T05:41:21.765Z digest
+info: 2021-09-03T05:41:21.766Z info params {"nonce":"nbNjdtlPfNe8kHvPYddUEkxSo1HbrVs7","cnonce":"89dbd07e33dff86b","nc":"00000002"}
+warn: 2021-09-03T05:41:21.767Z warn log
+info: 2021-09-03T05:41:21.769Z ::1 - GET / HTTP/1.1 200 17 - 3.463 ms
+
+info: 2021-09-04T07:59:33.464Z Escuchando en el puerto 3000.
+info: 2021-09-04T08:00:12.018Z Escuchando en el puerto 3000.
