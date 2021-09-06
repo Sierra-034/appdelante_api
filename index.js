@@ -6,16 +6,9 @@ const logger = require('./utils/logger');
 const morgan = require('morgan');
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
+const auth = require('./api/libs/auth');
 
-passport.use(new BasicStrategy(
-    (username, password, done) => {
-        if(username.valueOf() === 'sam' && password.valueOf() === 'sam123') {
-            return done(null, true);
-        } else {
-            return done(null, false);
-        }
-    }
-));
+passport.use(new BasicStrategy(auth));
 
 const app = express();
 app.use(bodyParser.json());
@@ -36,4 +29,3 @@ app.get('/', passport.authenticate('basic', { session: false }), (request, respo
 app.listen(3000, () => {
     logger.info('Escuchando en el puerto 3000.');
 });
- 
