@@ -5,16 +5,15 @@ const usuariosRouter = require('./api/recursos/usuarios/usuarios.routes');
 const logger = require('./utils/logger');
 const morgan = require('morgan');
 const passport = require('passport');
-const BasicStrategy = require('passport-http').BasicStrategy;
-const auth = require('./api/libs/auth');
+const authJWT = require('./api/libs/auth');
 
-passport.use(new BasicStrategy(auth));
+passport.use(authJWT);
 
 const app = express();
 app.use(bodyParser.json());
 app.use(morgan('short', {
     stream: {
-        write: message => logger.info(message)
+        write: message => logger.info(message.trim())
     }
 }));
 
@@ -22,7 +21,8 @@ app.use(passport.initialize());
 app.use('/productos', productosRouter);
 app.use('/usuarios', usuariosRouter);
 
-app.get('/', passport.authenticate('basic', { session: false }), (request, response) => {
+app.get('/', passport.authenticate('jwt', { session: false }), (request, response) => {
+    logger.info('userInfo', request.user);
     response.send('API de appdelante');
 });
 
