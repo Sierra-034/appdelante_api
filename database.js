@@ -5,6 +5,9 @@ const productos = [
     { id: 'kfhdg2', titulo: 'microfono blue yeti', precio: 100, moneda: 'USD' }
 ];
 
+const usuarios = [];
+
 module.exports = {
-    productos
+    productos,
+    usuarios
 }
