@@ -4,19 +4,12 @@ const productosRouter = require('./api/recursos/productos/productos.routes');
 const usuariosRouter = require('./api/recursos/usuarios/usuarios.routes');
 const logger = require('./utils/logger');
 const morgan = require('morgan');
+const auth = require('./api/libs/auth');
 
 const passport = require('passport');
 const BasicStrategy = require('passport-http').BasicStrategy;
 
-passport.use(new BasicStrategy(
-    (username, password, done) => {
-        if (username.valueOf() === 'sierra' && password.valueOf() === 'appdelante123') {
-            return done(null, true);
-        } else {
-            return done(null, false);
-        }
-    }
-));
+passport.use(new BasicStrategy(auth));
  
 const app = express();
 app.use(bodyParser.json());
