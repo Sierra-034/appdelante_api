@@ -4,7 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const logger = require('../../../utils/logger');
-const validarUsuario = require('./usuarios.validate');
+const validarUsuario = require('./usuarios.validate').validarUsuario;
+const validarLogin = require('./usuarios.validate').validarLogin;
 const usuarios = require('../../../database').usuarios;
 
 const usuariosRouter = express.Router();
@@ -42,7 +43,7 @@ usuariosRouter.post('/', validarUsuario, (request, response) => {
     });
 });
 
-usuariosRouter.post('/login', (request, response) => {
+usuariosRouter.post('/login', validarLogin, (request, response) => {
     const usuarioNoAutenticado = request.body;
     const index = usuarios.findIndex(usuario => usuario.username === usuarioNoAutenticado.username);
     if (index === -1) {

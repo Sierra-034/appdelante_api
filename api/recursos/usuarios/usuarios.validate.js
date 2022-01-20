@@ -7,7 +7,7 @@ const bluePrintUsuario = Joi.object({
     email: Joi.string().email().required(),
 });
 
-module.exports = (request, response, next) => {
+const validarUsuario = (request, response, next) => {
     const validationResult = bluePrintUsuario.validate(request.body, { abortEarly: false, convert: false });
     if (validationResult.error) {
         logger.info("Usuarios falló la validación", validationResult.error.details.map(error => error.message));
@@ -17,3 +17,23 @@ module.exports = (request, response, next) => {
 
     next();
 }
+
+const blueprintLogin = Joi.object({
+    username: Joi.string().required(),
+    password: Joi.string().required(),
+});
+
+const validarLogin = (request, response, next) => {
+    const resultado = blueprintLogin.validate(request.body, { abortEarly: false, convert: false });
+    if (resultado.error) {
+        response.status(400).send("Login falló. Debes especificar el username y contraseña del usuario. ambos deben ser strings.");
+        return;
+    }
+
+    next();
+};
+
+module.exports = {
+    validarUsuario,
+    validarLogin,
+};
