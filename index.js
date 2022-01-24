@@ -4,12 +4,11 @@ const productosRouter = require('./api/recursos/productos/productos.routes');
 const usuariosRouter = require('./api/recursos/usuarios/usuarios.routes');
 const logger = require('./utils/logger');
 const morgan = require('morgan');
-const auth = require('./api/libs/auth');
+const authJWT = require('./api/libs/auth');
 
 const passport = require('passport');
-const BasicStrategy = require('passport-http').BasicStrategy;
 
-passport.use(new BasicStrategy(auth));
+passport.use(authJWT);
  
 const app = express();
 app.use(bodyParser.json());
@@ -24,7 +23,8 @@ app.use(passport.initialize());
 app.use('/productos', productosRouter);
 app.use('/usuarios', usuariosRouter);
 
-app.get('/', passport.authenticate('basic', { session: false }), (request, response) => {
+app.get('/', passport.authenticate('jwt', { session: false }), (request, response) => {
+    logger.info(request.user);
     response.send('API de appdelante');
 });
 
