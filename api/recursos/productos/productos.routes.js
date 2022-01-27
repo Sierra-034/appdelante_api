@@ -1,16 +1,21 @@
 const express = require('express');
-const productos = require('../../../database').productos;
+const passport = require('passport');
 const uuidv4 = require('uuid/v4');
 const validators = require('./productos.validate');
 const logger = require('../../../utils/logger');
 
+const jwtAuthenticate = passport.authenticate('jwt', { session: false });
+const productos = require('../../../database').productos;
 const productosRouter = express.Router();
 
 productosRouter.get('/', (request, response) => response.json(productos));
 
-productosRouter.post('/', validators.validateProduct, (request, response) => {
-    let nuevoProducto = request.body;
-    nuevoProducto.id = uuidv4();
+productosRouter.post('/', [jwtAuthenticate, validators.validateProduct], (request, response) => {
+    let nuevoProducto = {
+        ...request.body,
+        id: uuidv4(),
+        dueño: request.user.username,
+    };
     productos.push(nuevoProducto);
     logger.info('Producto agregado a la colección productos', nuevoProducto);
     response.status(201).json(nuevoProducto);
@@ -23,20 +28,35 @@ productosRouter.get('/:id', validators.validateExistance, (request, response) =>
 
 productosRouter.put(
     '/:id',
-    [validators.validateExistance, validators.validateProduct],
+    [jwtAuthenticate, validators.validateExistance, validators.validateProduct],
     (request, response) => {
-
-        let productReplacer = request.body;
-        const idToReplace = productos.findIndex(producto => producto.id === request.params.id);
+        let productReplacer = {
+            ...request.body,
+            id: request.params.id,
+            dueño: request.user.username
+        }
         
-        productReplacer.id = request.params.id;
+        const idToReplace = productos.findIndex(producto => producto.id === request.params.id);
+        if (productos[idToReplace].dueño !== productReplacer.dueño) {
+            logger.info(`Usuario ${request.user.username} no es dueño del producto con id ${request.params.id}. Dueño real es ${productos[idToReplace].dueño}. Request no será procesado`);
+            response.status(401).send(`No eres dueño del producto con id ${request.params.id}. Solo puedes modificar productos creados por ti.`);
+            return;
+        }
         productos[idToReplace] = productReplacer;
         logger.info(`Producto con id [${request.params.id}] fué reemplazado con nuevo producto`, productReplacer);
         response.status(200).json(productReplacer);
     });
 
-productosRouter.delete('/:id', validators.validateExistance, (request, response) => {
+productosRouter.delete('/:id', [jwtAuthenticate, validators.validateExistance], (request, response) => {
     const idToDelete = productos.findIndex(producto => producto.id === request.params.id);
+
+    if (productos[idToDelete].dueño !== request.user.username) {
+        logger.info(`Usuario ${request.user.username} no es dueño de producto con id ${request.params.id}. Dueño real es ${productos[idToDelete].dueño}. Request no será procesado`);
+        response.status(401).send(`No eres dueño del producto con id ${request.params.id}. Solo puedes borrar productos creados por tí.`);
+        return;
+    }
+
+    logger.info(`Producto con id [${request.params.id}] fué borrado.`)
     const deletedProduct = productos.splice(idToDelete, 1);
     response.status(200).json(deletedProduct);
 });
