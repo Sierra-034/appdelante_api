@@ -1,9 +1,11 @@
 const ambiente = process.env.NODE_ENV || 'development';
 const server_port = process.env.SERVER_PORT || 3000;
+const db_connection_string = process.env.MONGO_DB_CONNECTION;
 
 const configuracionBase = {
     jwt: {},
-    puerto: server_port
+    puerto: server_port,
+    mongo: db_connection_string,
 };
 
 let configuracionDeAmbiente = {};
