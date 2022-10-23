@@ -7,6 +7,7 @@ const logger = require('../../../utils/logger');
 const validarUsuario = require('./usuarios.validate').validarUsuario;
 const validarPedidoLogin = require('./usuarios.validate').validarPedidoLogin;
 const usuarios = require('../../../database').usuarios;
+const config = require('../../../config');
 
 const usuariosRouter = express.Router();
 
@@ -58,9 +59,9 @@ usuariosRouter.post('/login', validarPedidoLogin, (request, response) => {
     const hashedPassword = usuarios[index].password;
     bcrypt.compare(usuarioNoAutenticado.password, hashedPassword, (err, iguales) => {
         if (iguales) {
-            const token = jwt.sign({ id: usuarios[index].id }, 'esto es un secreto', { expiresIn: 86400 });
-            logger.info(`Usuario ${usuarioNoAutenticado.username} completó la autenticación exitósamente.`);
-            response.status(200).json({ token });
+            const token = jwt.sign({ id: usuarios[index].id }, config.jwt.secreto, { expiresIn: config.jwt.tiempoDeExpiracion });
+            logger.info(`Usuario ${usuarioNoAutenticado.username} completó autenticación existósamente.`);
+            response.status(200).json({ token })
         } else {
             logger.info(`Usuario ${usuarioNoAutenticado.username} no completó la autenticación. Contraseña incorrecta.`);
             response.status(400).send('Credenciales incorrectas. Asegúrate de que el usuario y contraseña sean correctas.');
