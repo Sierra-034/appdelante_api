@@ -1,10 +1,13 @@
-const logger = require('../../utils/logger');
-const usuarios = require('../../database').usuarios;
 const bcrypt = require('bcrypt');
 const passportJWT = require('passport-jwt');
 
+const logger = require('../../utils/logger');
+const usuarios = require('../../database').usuarios;
+const config = require('../../config');
+
+
 const jwtOptions = {
-    secretOrKey: 'esto es un secreto',
+    secretOrKey: config.jwt.secreto,
     jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
 }
 

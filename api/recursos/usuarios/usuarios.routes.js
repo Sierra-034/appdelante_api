@@ -7,6 +7,7 @@ const logger = require('../../../utils/logger');
 const validarUsuario = require('./usuarios.validate').validarUsuario;
 const validarLogin = require('./usuarios.validate').validarLogin;
 const usuarios = require('../../../database').usuarios;
+const config = require('../../../config');
 
 const usuariosRouter = express.Router();
 
@@ -55,7 +56,7 @@ usuariosRouter.post('/login', validarLogin, (request, response) => {
     const hashedPassword = usuarios[index].password;
     bcrypt.compare(usuarioNoAutenticado.password, hashedPassword, (error, iguales) => {
         if (iguales) {
-            const token = jwt.sign({id: usuarios[index].id}, 'esto es un secreto', {expiresIn: 86400});
+            const token = jwt.sign({id: usuarios[index].id}, config.jwt.secreto, {expiresIn: config.jwt.tiempoDeExpiracion});
             logger.info(`Usuario ${usuarioNoAutenticado.username} completó autenticación existósamente.`);
             response.status(200).json({ token })
         } else {

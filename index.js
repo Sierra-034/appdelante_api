@@ -5,6 +5,7 @@ const usuariosRouter = require('./api/recursos/usuarios/usuarios.routes');
 const logger = require('./utils/logger');
 const morgan = require('morgan');
 const authJWT = require('./api/libs/auth');
+const config = require('./config');
 
 const passport = require('passport');
 
@@ -28,7 +29,7 @@ app.get('/', passport.authenticate('jwt', { session: false }), (request, respons
     response.send('API de appdelante');
 });
 
-app.listen(3000, () => {
+app.listen(config.puerto, () => {
     logger.info('Escuchando en el puerto 3000.');
 });
  
