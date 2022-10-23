@@ -3,17 +3,22 @@ const productos = require('../../../database').productos;
 const uuidv4 = require('uuid/v4');
 const validators = require('./productos.validate');
 const logger = require('../../../utils/logger');
+const Producto = require('./productos.model');
 
 const productosRouter = express.Router();
 
 productosRouter.get('/', (request, response) => response.json(productos));
 
-productosRouter.post('/', validators.validateProduct, (request, response) => {
-    let nuevoProducto = request.body;
-    nuevoProducto.id = uuidv4();
-    productos.push(nuevoProducto);
-    logger.info('Producto agregado a la colección productos', nuevoProducto);
-    response.status(201).json(nuevoProducto);
+productosRouter.post('/', [jwtAuthenticate, validators.validateProduct], (request, response) => {
+    new Producto({ ...request.body, dueño: request.user.username }).save()
+        .then(producto => {
+            logger.info('Producto agregado a la colección productos', producto);
+            response.status(201).json(producto);
+        })
+        .catch(err => {
+            logger.warn('Producto, no pudo ser creado', err);
+            response.status(500).send("Error ocurrió al tratar de crear el producto.");
+        });
 });
 
 productosRouter.get('/:id', validators.validateExistance, (request, response) => {
@@ -28,7 +33,7 @@ productosRouter.put(
 
         let productReplacer = request.body;
         const idToReplace = productos.findIndex(producto => producto.id === request.params.id);
-        
+
         productReplacer.id = request.params.id;
         productos[idToReplace] = productReplacer;
         logger.info(`Producto con id [${request.params.id}] fué reemplazado con nuevo producto`, productReplacer);
