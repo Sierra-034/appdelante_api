@@ -1,6 +1,6 @@
 module.exports = {
     jwt: {
-        secreto: 'secretodededesarrollo',
+        secreto: process.env.SECRET_KEY,
         tiempoDeExpiracion: '24h',
     }
 }

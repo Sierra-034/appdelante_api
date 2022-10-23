@@ -8,8 +8,23 @@ services:
       - 3000:3000
       - 9229:9229
     environment:
+      - SECRET_KEY
       - SERVER_PORT=3000
+      - NODE_ENV=development
+      - MONGO_DB_CONNECTION=mongodb://mongo:27017/appdelante
     volumes:
       - ./:/app:ro
       - /app/node_modules
     command: npm run debug
+
+  mongo:
+    image: mongo:4.2.8
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+      - mongodb_config:/data/configdb
+
+volumes:
+  mongodb :
+  mongodb_config:
