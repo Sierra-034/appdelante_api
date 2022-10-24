@@ -1,6 +1,5 @@
 const express = require('express');
-const productos = require('../../../database').productos;
-const uuidv4 = require('uuid/v4');
+const passport = require('passport');
 const validators = require('./productos.validate');
 const logger = require('../../../utils/logger');
 const Producto = require('./productos.model');
