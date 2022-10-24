@@ -28,7 +28,7 @@ productosRouter.post('/', [jwtAuthenticate, validators.validateProduct], (reques
         });
 });
 
-productosRouter.get('/:id', (request, response) => {
+productosRouter.get('/:id', validators.validateId, (request, response) => {
     let id = request.params.id;
     productosController.obtenerProducto(id)
         .then(producto => {
