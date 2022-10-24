@@ -28,9 +28,20 @@ productosRouter.post('/', [jwtAuthenticate, validators.validateProduct], (reques
         });
 });
 
-productosRouter.get('/:id', validators.validateExistance, (request, response) => {
-    const product = productos.find(producto => producto.id === request.params.id);
-    response.status(200).json(product);
+productosRouter.get('/:id', (request, response) => {
+    let id = request.params.id;
+    productosController.obtenerProducto(id)
+        .then(producto => {
+            if (!producto) {
+                response.status(404).send(`Producto con id [${id}] no existe`);
+            } else {
+                response.status(200).json(producto);
+            }
+        })
+        .catch(err => {
+            logger.error(`Excepción ocurrió al tratar de obtener producto con id [${id}]`, err);
+            response.status(500).send(`Error ocurrió obteniendo producto con id [${id}]`);
+        });
 });
 
 productosRouter.put(
