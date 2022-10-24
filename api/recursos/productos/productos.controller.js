@@ -7,6 +7,11 @@ function crearProducto(producto, dueño) {
     }).save();
 }
 
+function obtenerProductos() {
+    return Producto.find({});
+}
+
 module.exports = {
-    crearProducto
+    crearProducto,
+    obtenerProductos
 }

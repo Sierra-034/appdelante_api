@@ -2,20 +2,28 @@ const express = require('express');
 const passport = require('passport');
 const validators = require('./productos.validate');
 const logger = require('../../../utils/logger');
-const productoController = require('./productos.controller');
+const productosController = require('./productos.controller');
 
 const productosRouter = express.Router();
 
-productosRouter.get('/', (request, response) => response.json(productos));
+productosRouter.get('/', (request, response) => {
+    productosController.obtenerProductos()
+        .then(productos => {
+            response.json(productos);
+        })
+        .catch(err => {
+            response.status(500).send("Error al leer de la base de datos");
+        });
+});
 
 productosRouter.post('/', [jwtAuthenticate, validators.validateProduct], (request, response) => {
-    productoController.crearProducto(request.body, request.user.username)
+    productosController.crearProducto(request.body, request.user.username)
         .then(producto => {
             logger.info('Producto agregado a la colección productos', producto);
             response.status(201).json(producto);
         })
         .catch(err => {
-            logger.warn('Producto, no pudo ser creado', err);
+            logger.error('Producto, no pudo ser creado', err);
             response.status(500).send("Error ocurrió al tratar de crear el producto.");
         });
 });
