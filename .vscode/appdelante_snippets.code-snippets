@@ -19,6 +19,12 @@
 		"scope": "javascript",
 		"prefix": ["info", "log-info"],
 		"body": "logger.info('${1:message}');$0",
-		"description": "Log in info level"
+		"description": "Loggin info level"
+	},
+	"Logger error": {
+		"scope": "javascript",
+		"prefix": ["error", "log-error"],
+		"body": "logger.error('${1:error_message}');$0",
+		"description": "Loggin error level"
 	}
 }
