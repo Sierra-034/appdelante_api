@@ -8,6 +8,17 @@ const blueprintProducto = Joi.object({
     moneda: Joi.string().length(3).uppercase()
 });
 
+const validateId = (request, response, next) => {
+    let id = request.params.id;
+    // regex
+    if (id.match(/^[a-fA-F0-9]{24}$/) === null) {
+        response.status(400).send(`El id [${id}] suministrado en el URL no es válido`);
+        return  // Siguiente callback
+    }
+
+    next();
+};
+
 const validateExistance = (request, response, next) => {
     const indexToLook = productos.findIndex(producto => producto.id === request.params.id);
     if (indexToLook === -1) {
@@ -37,5 +48,6 @@ const validateProduct = (request, response, next) => {
 
 module.exports = {
     validateExistance,
-    validateProduct
+    validateProduct,
+    validateId
 };
