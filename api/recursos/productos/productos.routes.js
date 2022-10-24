@@ -67,18 +67,40 @@ productosRouter.put(
         response.status(200).json(productReplacer);
     });
 
-productosRouter.delete('/:id', [jwtAuthenticate, validators.validateExistance], (request, response) => {
-    const idToDelete = productos.findIndex(producto => producto.id === request.params.id);
+productosRouter.delete('/:id', [jwtAuthenticate, validators.validateId], async (request, response) => {
+    let id = request.params.id;
+    let productoBorrar;
 
-    if (productos[idToDelete].dueño !== request.user.username) {
-        logger.info(`Usuario ${request.user.username} no es dueño de producto con id ${request.params.id}. Dueño real es ${productos[idToDelete].dueño}. Request no será procesado`);
-        response.status(401).send(`No eres dueño del producto con id ${request.params.id}. Solo puedes borrar productos creados por tí.`);
-        return;
+    // async / await
+    try {
+        productoBorrar = await productosController.obtenerProducto(id);
+    } catch (error) {
+        logger.error(`Excepción ocurrió al procesar el borrado de producto con id [${id}]`, error);
+        response.status(500).send(`Error ocurrió borrando producto con id [${id}]`);
+        return
     }
 
-    logger.info(`Producto con id [${request.params.id}] fué borrado.`)
-    const deletedProduct = productos.splice(idToDelete, 1);
-    response.status(200).json(deletedProduct);
+    if (!productoBorrar) {
+        logger.info(`Producto con id [${id}] no existe. Nada que borrar.`);
+        response.status(404).send(`Producto con id [${id}] no existe. Nada que borrar.`);
+        return
+    }
+    
+    let usuarioAutenticado = request.user.username;
+    if (productoBorrar.dueño !== usuarioAutenticado) {
+        logger.info(`Usuario [${usuarioAutenticado}] no es dueño de producto con id [${id}]. Dueño real es [${productoBorrar.dueño}]. Request no será procesado`);
+        response.status(401).send(`No eres dueño del producto con id [${id}]. Solo puedes borrar productos creados por tí.`);
+        return
+    }
+
+    try {
+        let productoBorrado = await productosController.borrarProducto(id);
+        logger.info(`Producto con id [${id}] fué borrado`);
+        response.json(productoBorrado);
+    } catch (error) {
+        logger.error(`Error ocurrió borrando el producto con id [${id}]`, error);
+        response.status(500).send(`Error ocurrió borrando producto con id [${id}]`);
+    }
 });
 
 module.exports = productosRouter;
