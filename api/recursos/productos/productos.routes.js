@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const validators = require('./productos.validate');
 const logger = require('../../../utils/logger');
-const Producto = require('./productos.model');
+const productoController = require('./productos.controller');
 
 const jwtAuthenticate = passport.authenticate('jwt', { session: false });
 const productos = require('../../../database').productos;
@@ -11,7 +11,7 @@ const productosRouter = express.Router();
 productosRouter.get('/', (request, response) => response.json(productos));
 
 productosRouter.post('/', [jwtAuthenticate, validators.validateProduct], (request, response) => {
-    new Producto({ ...request.body, dueño: request.user.username }).save()
+    productoController.crearProducto(request.body, request.user.username)
         .then(producto => {
             logger.info('Producto agregado a la colección productos', producto);
             response.status(201).json(producto);
