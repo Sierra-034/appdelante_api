@@ -45,18 +45,60 @@ productosRouter.get('/:id', validators.validateId, (request, response) => {
 });
 
 productosRouter.put(
-    '/:id',
-    [validators.validateExistance, validators.validateProduct],
-    (request, response) => {
+    "/:id",
+    [jwtAuthenticate, validators.validateProduct],
+    async (request, response) => {
+        let id = request.params.id;
+        let requestUsuario = request.user.username;
+        let productoReemplazar;
 
-        let productReplacer = request.body;
-        const idToReplace = productos.findIndex(producto => producto.id === request.params.id);
+        try {
+            productoReemplazar = await productosController.obtenerProducto(id);
+        } catch (error) {
+            logger.warn(
+                `Excepción ocurrió al procesar la modificación del producto con id [${id}]`,
+                error
+            );
+            response
+                .status(500)
+                .send(`Error ocurrió modificando producto con id [${id}]`);
+            return;
+        }
 
-        productReplacer.id = request.params.id;
-        productos[idToReplace] = productReplacer;
-        logger.info(`Producto con id [${request.params.id}] fué reemplazado con nuevo producto`, productReplacer);
-        response.status(200).json(productReplacer);
-    });
+        if (!productoReemplazar) {
+            response.status(404).send(`El producto con id [${id}] no existe`);
+            return;
+        }
+
+        if (productoReemplazar.dueño !== requestUsuario) {
+            logger.warn(
+                `Usuario [${requestUsuario}] no es dueño de producto con id [${id}]. Dueño real es [${productoReemplazar.dueño}]. Request no será procesado`
+            );
+            response
+                .status(401)
+                .send(
+                    `No eres dueño del producto con id [${id}]. Solo puedes modificar productos creados por tí.`
+                );
+            return;
+        }
+
+        productosController
+            .reemplazarProducto(id, request.body, requestUsuario)
+            .then((producto) => {
+                response.json(producto);
+                logger.info(`Producto con id reemplazado con nuevo producto`, producto);
+            })
+            .catch((err) => {
+                logger.error(
+                    `Excepción al tratar de reemplazar producto con id [${id}]`,
+                    err
+                );
+                response
+                    .status(500)
+                    .send(`Error ocurrió reemplazando producto con id [${id}]`);
+            });
+    }
+);
 
 productosRouter.delete('/:id', [jwtAuthenticate, validators.validateId], async (request, response) => {
     let id = request.params.id;

@@ -19,9 +19,23 @@ function borrarProducto(id) {
     return Producto.findByIdAndRemove(id);
 }
 
-module.exports = {
-    crearProducto,
-    obtenerProductos,
-    obtenerProducto,
-    borrarProducto
+function reemplazarProducto(id, producto, username) {
+	return Producto.findOneAndUpdate(
+		{ _id: id },
+		{
+			...producto,
+			dueño: username,
+		},
+		{
+			new: true,
+		}
+	);
 }
+
+module.exports = {
+	crearProducto,
+	obtenerProductos,
+	obtenerProducto,
+	borrarProducto,
+	reemplazarProducto,
+};
