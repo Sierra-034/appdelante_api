@@ -18,25 +18,25 @@
 	"Generic respone": {
 		"scope": "javascript",
 		"prefix": "restatus",
-		"body": "response.status(${1:stauts_code}).send('${2:message}');$0",
+		"body": "response.status(${1:stauts_code}).send(`${2:message}`);$0",
 		"description": "Generic response for the user"
 	},
 	"Logger info": {
 		"scope": "javascript",
 		"prefix": ["info", "log-info"],
-		"body": "logger.info('${1:message}');$0",
+		"body": "logger.info(`${1:message}`);$0",
 		"description": "Loggin info level"
 	},
 	"Logger warn": {
 		"scope": "javascript",
 		"prefix": ["warn", "log-warn"],
-		"body": "logger.warn('${1:message}');$0",
+		"body": "logger.warn(`${1:message}`);$0",
 		"description": "Loggin warn level"
 	},
 	"Logger error": {
 		"scope": "javascript",
 		"prefix": ["error", "log-error"],
-		"body": "logger.error('${1:error_message}');$0",
+		"body": "logger.error(`${1:error_message}`);$0",
 		"description": "Loggin error level"
 	}
 }
