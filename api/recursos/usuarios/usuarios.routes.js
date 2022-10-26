@@ -12,6 +12,13 @@ const usuarioController = require("./usuarios.controller");
 
 const usuariosRouter = express.Router();
 
+function transformarBodyALowercase(request, response, next) {
+	request.body.username &&
+		(request.body.username = request.body.username.toLowerCase());
+	request.body.email && (request.body.email = request.body.email.toLowerCase());
+	next();
+}
+
 usuariosRouter.get("/", (request, response) => {
 	usuarioController
 		.obtenerUsuarios()
@@ -24,10 +31,13 @@ usuariosRouter.get("/", (request, response) => {
 		});
 });
 
-usuariosRouter.post('/', validarUsuario, (request, response) => {
-    const nuevoUsuario = request.body;
+usuariosRouter.post(
+	"/",
+	[validarUsuario, transformarBodyALowercase],
+	(request, response) => {
+		const nuevoUsuario = request.body;
 
-    usuarioController
+		usuarioController
 			.usuarioExiste(nuevoUsuario.username, nuevoUsuario.email)
 			.then((usuarioExiste) => {
 				if (usuarioExiste) {
@@ -74,29 +84,55 @@ usuariosRouter.post('/', validarUsuario, (request, response) => {
 					.status(500)
 					.send(`Error ocurrió al tratar de crear nuevo usuario.`);
 			});
-    
-});
+	}
+);
 
-usuariosRouter.post('/login', validarLogin, (request, response) => {
-    const usuarioNoAutenticado = request.body;
-    const index = usuarios.findIndex(usuario => usuario.username === usuarioNoAutenticado.username);
-    if (index === -1) {
-        logger.info(`Usuario ${usuarioNoAutenticado.username} no existe. No pudo ser autenticado`);
-        response.status(400).send('Credenciales incorrectas. El usuario no existe');
-        return;
-    }
+usuariosRouter.post(
+	"/login",
+	[validarLogin, transformarBodyALowercase],
+	(request, response) => {
+		const usuarioNoAutenticado = request.body;
+		const index = usuarios.findIndex(
+			(usuario) => usuario.username === usuarioNoAutenticado.username
+		);
+		if (index === -1) {
+			logger.info(
+				`Usuario ${usuarioNoAutenticado.username} no existe. No pudo ser autenticado`
+			);
+			response
+				.status(400)
+				.send("Credenciales incorrectas. El usuario no existe");
+			return;
+		}
 
-    const hashedPassword = usuarios[index].password;
-    bcrypt.compare(usuarioNoAutenticado.password, hashedPassword, (error, iguales) => {
-        if (iguales) {
-            const token = jwt.sign({id: usuarios[index].id}, config.jwt.secreto, {expiresIn: config.jwt.tiempoDeExpiracion});
-            logger.info(`Usuario ${usuarioNoAutenticado.username} completó autenticación existósamente.`);
-            response.status(200).json({ token })
-        } else {
-            logger.info(`Usuario ${usuarioNoAutenticado.username} no completó autentiación. Contraseña incorrecta`);
-            response.status(400).send('Credenciales incorrectas. Asegúrate que el username y contraseñas sean correctas.');
-        }
-    })
-});
+		const hashedPassword = usuarios[index].password;
+		bcrypt.compare(
+			usuarioNoAutenticado.password,
+			hashedPassword,
+			(error, iguales) => {
+				if (iguales) {
+					const token = jwt.sign(
+						{ id: usuarios[index].id },
+						config.jwt.secreto,
+						{ expiresIn: config.jwt.tiempoDeExpiracion }
+					);
+					logger.info(
+						`Usuario ${usuarioNoAutenticado.username} completó autenticación existósamente.`
+					);
+					response.status(200).json({ token });
+				} else {
+					logger.info(
+						`Usuario ${usuarioNoAutenticado.username} no completó autentiación. Contraseña incorrecta`
+					);
+					response
+						.status(400)
+						.send(
+							"Credenciales incorrectas. Asegúrate que el username y contraseñas sean correctas."
+						);
+				}
+			}
+		);
+	}
+);
 
 module.exports = usuariosRouter;
