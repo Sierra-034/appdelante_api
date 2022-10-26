@@ -24,8 +24,17 @@ function usuarioExiste(username, email) {
 	});
 }
 
+function obtenerUsuario({ username: username, id: id }) {
+	if (username) return Usuario.findOne({ username: username });
+	if (id) return Usuario.findById(id);
+	throw new Error(
+		"Función obtener usuario del controller fué llamada sin especificar username o id."
+	);
+}
+
 module.exports = {
 	obtenerUsuarios,
 	crearUsuario,
 	usuarioExiste,
+	obtenerUsuario,
 };

@@ -90,8 +90,22 @@ usuariosRouter.post(
 usuariosRouter.post(
 	"/login",
 	[validarLogin, transformarBodyALowercase],
-	(request, response) => {
+	async (request, response) => {
 		const usuarioNoAutenticado = request.body;
+		let usuarioRegistrado;
+
+		try {
+			usuarioRegistrado = await usuarioController.obtenerUsuario({
+				username: usuarioNoAutenticado.username,
+			});
+		} catch (error) {
+			logger.error(
+				`Error ocurrió al tratar de determinar si el usuario [${usuarioNoAutenticado.username}] ya existe`,
+				err
+			);
+			response.status(500).send(`Error ocurrió duarnte el proceso de login.`);
+		}
+
 		const index = usuarios.findIndex(
 			(usuario) => usuario.username === usuarioNoAutenticado.username
 		);
