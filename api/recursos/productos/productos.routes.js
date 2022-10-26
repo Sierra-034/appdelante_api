@@ -21,7 +21,10 @@ productosRouter.get('/', (request, response) => {
 productosRouter.post('/', [jwtAuthenticate, validators.validateProduct], (request, response) => {
     productosController.crearProducto(request.body, request.user.username)
         .then(producto => {
-            logger.info('Producto agregado a la colección productos', producto);
+            logger.info(
+							"Producto agregado a la colección productos",
+							producto.toObject()
+						);
             response.status(201).json(producto);
         })
         .catch(err => {
@@ -88,7 +91,10 @@ productosRouter.put(
 			.reemplazarProducto(id, request.body, requestUsuario)
 			.then((producto) => {
 				response.json(producto);
-				logger.info(`Producto con id reemplazado con nuevo producto`, producto);
+				logger.info(
+					`Producto con id reemplazado con nuevo producto`,
+					producto.toObject()
+				);
 			})
 			.catch((err) => {
 				logger.error(
