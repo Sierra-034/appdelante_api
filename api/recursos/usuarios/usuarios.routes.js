@@ -29,34 +29,52 @@ usuariosRouter.post('/', validarUsuario, (request, response) => {
 
     usuarioController
         .usuarioExiste(nuevoUsuario.username, nuevoUsuario.email)
-        .then((usuarioExiste) => { });
+        .then((usuarioExiste) => {
+            if (usuarioExiste) {
+                logger.warn(
+                    `Email [${nuevoUsuario.email}] o username [${nuevoUsuario.username}] ya existe en la base de datos`
+                );
+                response
+                    .status(409)
+                    .send(`El email o usuario ya están asociados con una cuenta`);
+                return;
+            }
 
-    const indice = usuarios.findIndex(usuario =>
-        usuario.username === nuevoUsuario.username || usuario.email === nuevoUsuario.email);
+            bcrypt.hash(nuevoUsuario.password, 10, (err, hashedPassword) => {
+                if (err) {
+                    logger.error(
+                        `Error ocurrió al tratar de obtener el hash de una contraseña`,
+                        err
+                    );
+                    response.status(500).send(`Error procesando creación del usuario.`);
+                    return;
+                }
 
-    if (indice !== -1) {
-        logger.info('Email o username ya existen en la base de datos.');
-        response.status(409).send('El email o username ya están asociados a una cuenta.');
-        return;
-    }
-
-    bcrypt.hash(nuevoUsuario.password, 10, (err, hashedPassword) => {
-        if (err) {
-            logger.info('Ocurrió algo al tratar de obtener el hash de una contraseña.', err);
-            response.status(500).send('Ocurrió un error procesando creación de usuario.');
-            return;
-        }
-
-        usuarios.push({
-            username: nuevoUsuario.username,
-            email: nuevoUsuario.email,
-            password: hashedPassword,
-            id: uuidv4()
+                usuarioController
+                    .crearUsuario(nuevoUsuario, hashedPassword)
+                    .then((nuevoUsuario) => {
+                        response.status(201).send(`Usuario creado exitósamente.`);
+                    })
+                    .catch((err) => {
+                        logger.error(
+                            `Error ocurrió al tratar de crear nuevo usuario`,
+                            err
+                        );
+                        response
+                            .status(500)
+                            .send(`Error ocurrió al tratar de crear nuevo usuario`);
+                    });
+            });
         })
+        .catch((err) => {
+            logger.error(
+                `Error ocurrió al tratar de verificar si usuario [${nuevoUsuario.username}] con email [${nuevoUsuario.email}] ya existe.`
+            );
+            response
+                .status(500)
+                .send(`Error ocurrió al tratar de crear nuevo usuario.`);
+        });
 
-        response.status(200).send('Usuario creado exitosamente.');
-        return;
-    });
 });
 
 usuariosRouter.post('/login', validarPedidoLogin, (request, response) => {
