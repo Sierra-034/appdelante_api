@@ -13,23 +13,26 @@ const usuarioController = require("./usuarios.controller");
 const usuariosRouter = express.Router();
 
 usuariosRouter.get("/", (request, response) => {
-	usuarioController
-		.obtenerUsuarios()
-		.then((usuarios) => {
-			response.json(usuarios);
-		})
-		.catch((err) => {
-			logger.error(`Error al obtener todos los usuarios`, err);
-			response.sendStatus(500);
-		});
+    usuarioController
+        .obtenerUsuarios()
+        .then((usuarios) => {
+            response.json(usuarios);
+        })
+        .catch((err) => {
+            logger.error(`Error al obtener todos los usuarios`, err);
+            response.sendStatus(500);
+        });
 });
 
 usuariosRouter.post('/', validarUsuario, (request, response) => {
-    let nuevoUsuario = request.body;
-    let indice = usuarios.findIndex(usuario => (
-        usuario.username === nuevoUsuario.username ||
-        usuario.email === nuevoUsuario.email
-    ));
+    const nuevoUsuario = request.body;
+
+    usuarioController
+        .usuarioExiste(nuevoUsuario.username, nuevoUsuario.email)
+        .then((usuarioExiste) => { });
+
+    const indice = usuarios.findIndex(usuario =>
+        usuario.username === nuevoUsuario.username || usuario.email === nuevoUsuario.email);
 
     if (indice !== -1) {
         logger.info('Email o username ya existen en la base de datos.');
