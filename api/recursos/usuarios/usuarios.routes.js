@@ -1,12 +1,10 @@
 const express = require('express');
-const uuidv4 = require('uuid/v4');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const logger = require('../../../utils/logger');
 const validarUsuario = require('./usuarios.validate').validarUsuario;
-const validarPedidoLogin = require('./usuarios.validate').validarPedidoLogin;
-const usuarios = require('../../../database').usuarios;
+const validarLogin = require('./usuarios.validate').validarLogin;
 const config = require('../../../config');
 const usuarioController = require("./usuarios.controller");
 

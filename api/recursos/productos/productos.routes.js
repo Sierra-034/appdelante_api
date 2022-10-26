@@ -4,6 +4,7 @@ const validators = require('./productos.validate');
 const logger = require('../../../utils/logger');
 const productosController = require('./productos.controller');
 
+const jwtAuthenticate = passport.authenticate('jwt', { session: false });
 const productosRouter = express.Router();
 
 productosRouter.get('/', (request, response) => {
