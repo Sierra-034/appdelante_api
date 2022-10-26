@@ -1,5 +1,4 @@
 const Joi = require('@hapi/joi');
-const productos = require('../../../database').productos;
 const logger = require('../../../utils/logger');
 
 const blueprintProducto = Joi.object({
@@ -14,17 +13,6 @@ const validateId = (request, response, next) => {
     if (id.match(/^[a-fA-F0-9]{24}$/) === null) {
         response.status(400).send(`El id [${id}] suministrado en el URL no es válido`);
         return  // Siguiente callback
-    }
-
-    next();
-};
-
-const validateExistance = (request, response, next) => {
-    const indexToLook = productos.findIndex(producto => producto.id === request.params.id);
-    if (indexToLook === -1) {
-        logger.warn(`El producto con id [${request.params.id}] no fué encontrado`);
-        response.status(404).send(`El producto con id [${request.params.id}] no fué encontrado`);
-        return;
     }
 
     next();
@@ -47,7 +35,6 @@ const validateProduct = (request, response, next) => {
 };
 
 module.exports = {
-    validateExistance,
     validateProduct,
-    validateId
+    validateId,
 };
