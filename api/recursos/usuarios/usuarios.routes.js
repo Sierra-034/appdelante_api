@@ -104,48 +104,54 @@ usuariosRouter.post(
 				err
 			);
 			response.status(500).send(`Error ocurrió duarnte el proceso de login.`);
-		}
-
-		const index = usuarios.findIndex(
-			(usuario) => usuario.username === usuarioNoAutenticado.username
-		);
-		if (index === -1) {
-			logger.info(
-				`Usuario ${usuarioNoAutenticado.username} no existe. No pudo ser autenticado`
-			);
-			response
-				.status(400)
-				.send("Credenciales incorrectas. El usuario no existe");
 			return;
 		}
 
-		const hashedPassword = usuarios[index].password;
-		bcrypt.compare(
-			usuarioNoAutenticado.password,
-			hashedPassword,
-			(error, iguales) => {
-				if (iguales) {
-					const token = jwt.sign(
-						{ id: usuarios[index].id },
-						config.jwt.secreto,
-						{ expiresIn: config.jwt.tiempoDeExpiracion }
-					);
-					logger.info(
-						`Usuario ${usuarioNoAutenticado.username} completó autenticación existósamente.`
-					);
-					response.status(200).json({ token });
-				} else {
-					logger.info(
-						`Usuario ${usuarioNoAutenticado.username} no completó autentiación. Contraseña incorrecta`
-					);
-					response
-						.status(400)
-						.send(
-							"Credenciales incorrectas. Asegúrate que el username y contraseñas sean correctas."
-						);
-				}
-			}
-		);
+		if (!usuarioRegistrado) {
+			logger.info(
+				`Usuario [${usuarioNoAutenticado.username}] no existe. No pudo ser autenticado`
+			);
+			response
+				.status(400)
+				.send(
+					`Credenciales incorrectas. Asegúrate que el username y contraseña sean correctos.`
+				);
+			return;
+		}
+
+		let contraseñaCorrecta;
+		try {
+			contraseñaCorrecta = await bcrypt.compare(
+				usuarioNoAutenticado.password,
+				usuarioRegistrado.password
+			);
+		} catch (error) {
+			logger.error(
+				`Error ocurrió al tratar de verificar si la contraseña es correcta`
+			);
+			response.status(500).send(`Error ocurrió durante el proceso de login`);
+			return;
+		}
+
+		if (contraseñaCorrecta) {
+			const token = jwt.sign({ id: usuarioRegistrado.id }, config.jwt.secreto, {
+				expiresIn: config.jwt.tiempoDeExpiracion,
+			});
+			logger.info(
+				`Usuario ${usuarioNoAutenticado.username} completó autenticación existósamente.`
+			);
+			response.status(200).json({ token });
+		} else {
+			logger.info(
+				`Usuario ${usuarioNoAutenticado.username} no completó autentiación. Contraseña incorrecta`
+			);
+			response
+				.status(400)
+				.send(
+					"Credenciales incorrectas. Asegúrate que el username y contraseñas sean correctas."
+				);
+		}
+
 	}
 );
 
