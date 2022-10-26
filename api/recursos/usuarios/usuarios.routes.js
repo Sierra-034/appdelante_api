@@ -26,6 +26,11 @@ usuariosRouter.get("/", (request, response) => {
 
 usuariosRouter.post('/', validarUsuario, (request, response) => {
     const nuevoUsuario = request.body;
+
+    usuarioController
+			.usuarioExiste(nuevoUsuario.username, nuevoUsuario.email)
+			.then((usuarioExiste) => {});
+    
     const indice = usuarios.findIndex(usuario => 
         usuario.username === nuevoUsuario.username || usuario.email === nuevoUsuario.email);
     
