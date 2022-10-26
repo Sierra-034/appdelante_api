@@ -8,11 +8,20 @@ const validarUsuario = require('./usuarios.validate').validarUsuario;
 const validarPedidoLogin = require('./usuarios.validate').validarPedidoLogin;
 const usuarios = require('../../../database').usuarios;
 const config = require('../../../config');
+const usuarioController = require("./usuarios.controller");
 
 const usuariosRouter = express.Router();
 
-usuariosRouter.get('/', (request, response) => {
-    response.json(usuarios);
+usuariosRouter.get("/", (request, response) => {
+	usuarioController
+		.obtenerUsuarios()
+		.then((usuarios) => {
+			response.json(usuarios);
+		})
+		.catch((err) => {
+			logger.error(`Error al obtener todos los usuarios`, err);
+			response.sendStatus(500);
+		});
 });
 
 usuariosRouter.post('/', validarUsuario, (request, response) => {
