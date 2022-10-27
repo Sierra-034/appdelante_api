@@ -8,19 +8,9 @@ const validarLogin = require('./usuarios.validate').validarLogin;
 const config = require('../../../config');
 const usuarioController = require("./usuarios.controller");
 const procesarErrores = require('../../libs/errorHandler').procesarErrores;
-
+const { DatosDeUsuarioYaEnUso, CredencialesIncorrectas } = require('./usuarios.error');
 
 const usuariosRouter = express.Router();
-
-class DatosDeUsuarioYaEnUso extends Error {
-    constructor(message) {
-        super(message);
-        this.message = message ||
-            'El email o usuario ya están asociados.';
-        this.status = 409;
-        this.name = 'DatosDeUsuarioYaEnUso';
-    }
-}
 
 function transformarBodyALowercase(request, response, next) {
     request.body.username &&
@@ -83,13 +73,7 @@ usuariosRouter.post(
                 `Usuario [${usuarioNoAutenticado.username}] no existe. No \
 			pudo ser autenticado`
             );
-            response
-                .status(400)
-                .send(
-                    `Credenciales incorrectas. Asegúrate que el username \
-				y contraseña sean correctos.`
-                );
-            return;
+            throw new CredencialesIncorrectas();
         }
 
         let contraseñaCorrecta;
@@ -114,12 +98,7 @@ usuariosRouter.post(
                 `Usuario ${usuarioNoAutenticado.username} no completó \
 			autentiación. Contraseña incorrecta.`
             );
-            response
-                .status(400)
-                .send(
-                    "Credenciales incorrectas. Asegúrate que el username \
-				y contraseñas sean correctas."
-                );
+            throw new CredencialesIncorrectas();
         }
     }));
 
