@@ -4,6 +4,7 @@ const validators = require('./productos.validate');
 const logger = require('../../../utils/logger');
 const productosController = require('./productos.controller');
 const procesarErrores = require('../../libs/errorHandler').procesarErrores;
+const { ProductNoExiste, UsuarioNoEsDueño } = require('./productos.error');
 
 const jwtAuthenticate = passport.authenticate('jwt', { session: false });
 const productosRouter = express.Router();
@@ -37,12 +38,10 @@ productosRouter.get(
         let id = request.params.id;
         return productosController.obtenerProducto(id)
             .then(producto => {
-                if (!producto) {
-                    response.status(404)
-                        .send(`Producto con id [${id}] no existe`);
-                } else {
-                    response.status(200).json(producto);
-                }
+                if (!producto) throw new ProductNoExiste(
+                    `Producto con id [${id}] no existe`
+                );
+                response.status(200).json(producto);
             });
     }));
 
@@ -57,8 +56,7 @@ productosRouter.put(
         productoReemplazar = await productosController.obtenerProducto(id);
 
         if (!productoReemplazar) {
-            response.status(404).send(`El producto con id [${id}] no existe`);
-            return;
+            throw new ProductNoExiste(`El producto con id [${id}] no existe`)
         }
 
         if (productoReemplazar.dueño !== requestUsuario) {
@@ -67,13 +65,8 @@ productosRouter.put(
             producto con id [${id}]. Dueño real es \
             [${productoReemplazar.dueño}]. Request no será procesado`
             );
-            response
-                .status(401)
-                .send(
-                    `No eres dueño del producto con id [${id}]. Solo \
-                puedes modificar productos creados por tí.`
-                );
-            return;
+            throw new UsuarioNoEsDueño(`No eres dueño del producto con id [${id}]. Solo \
+        puedes modificar productos creados por tí.`);
         }
 
         productosController
@@ -84,6 +77,7 @@ productosRouter.put(
                     `Producto con id reemplazado con nuevo producto`,
                     producto.toObject()
                 );
+
             })
     }));
 
@@ -100,15 +94,13 @@ productosRouter.delete(
 
         if (!productoBorrar) {
             logger.info(`Producto con id [${id}] no existe. Nada que borrar.`);
-            response.status(404).send(`Producto con id [${id}] no existe. Nada que borrar.`);
-            return
+            throw new ProductNoExiste(`Producto con id [${id}] no existe. Nada que borrar`);
         }
 
         let usuarioAutenticado = request.user.username;
         if (productoBorrar.dueño !== usuarioAutenticado) {
             logger.info(`Usuario [${usuarioAutenticado}] no es dueño de producto con id [${id}]. Dueño real es [${productoBorrar.dueño}]. Request no será procesado`);
-            response.status(401).send(`No eres dueño del producto con id [${id}]. Solo puedes borrar productos creados por tí.`);
-            return
+            throw new UsuarioNoEsDueño(`No eres dueño del producto con id [${id}]. Solo puedes borrar productos creados por tí.`);
         }
 
         let productoBorrado = await productosController.borrarProducto(id);
