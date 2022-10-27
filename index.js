@@ -43,11 +43,12 @@ if (config.ambiente === 'prod') {
     app.use(errorHandler.devErrors);
 }
 
-app.get('/', passport.authenticate('jwt', { session: false }), (request, response) => {
-    logger.info('userInfo', request.user);
-    response.send('API de appdelante');
-});
-
-app.listen(config.puerto, () => {
+const server = app.listen(config.puerto, () => {
     logger.info('Escuchando en el puerto 3000.');
 });
+
+module.exports = {
+    app,
+    server,
+};
+
