@@ -21,22 +21,10 @@
 		"body": "response.status(${1:stauts_code}).send(`${2:message}`);$0",
 		"description": "Generic response for the user"
 	},
-	"Logger info": {
+	"Logger": {
 		"scope": "javascript",
-		"prefix": ["info", "log-info"],
-		"body": "logger.info(`${1:message}`);$0",
-		"description": "Loggin info level"
+		"prefix": "logger",
+		"body": "logger.${1:type}(`${2:message}`$3);$0",
+		"description": "Log info using logger"
 	},
-	"Logger warn": {
-		"scope": "javascript",
-		"prefix": ["warn", "log-warn"],
-		"body": "logger.warn(`${1:message}`);$0",
-		"description": "Loggin warn level"
-	},
-	"Logger error": {
-		"scope": "javascript",
-		"prefix": ["error", "log-error"],
-		"body": "logger.error(`${1:error_message}`);$0",
-		"description": "Loggin error level"
-	}
 }
