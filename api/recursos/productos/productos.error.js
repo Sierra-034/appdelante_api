@@ -9,7 +9,7 @@ class ProductoNoExiste extends Error {
 }
 
 class UsuarioNoEsDueño extends Error {
-    constructo(message) {
+    constructor(message) {
         super(message);
         this.message = message ||
             'No eres dueño del producto. Operación no puede ser \

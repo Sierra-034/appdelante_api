@@ -4,6 +4,7 @@ services:
   appdelante:
     build:
       context: .
+      target: test
     ports:
       - 3000:3000
       - 9229:9229
@@ -15,7 +16,7 @@ services:
     volumes:
       - ./:/app:ro
       - /app/node_modules
-    command: npm run debug
+    # command: npm run debug
 
   mongo:
     image: mongo:4.2.8
