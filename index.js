@@ -8,6 +8,7 @@ const usuariosRouter = require('./api/recursos/usuarios/usuarios.routes');
 const logger = require('./utils/logger');
 const authJWT = require('./api/libs/auth');
 const config = require('./config');
+const errorHandler = require('./api/libs/errorHandler');
 
 const passport = require('passport');
 
@@ -33,6 +34,14 @@ app.use(passport.initialize());
 
 app.use('/productos', productosRouter);
 app.use('/usuarios', usuariosRouter);
+
+app.use(errorHandler.procesarErroresDeDB);
+
+if (config.ambiente === 'prod') {
+    app.use(errorHandler.prodErrors);
+} else {
+    app.use(errorHandler.devErrors);
+}
 
 app.get('/', passport.authenticate('jwt', { session: false }), (request, response) => {
     logger.info(request.user);
