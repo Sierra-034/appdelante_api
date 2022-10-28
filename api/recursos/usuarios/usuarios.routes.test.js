@@ -1,9 +1,11 @@
 let bcrypt = require('bcrypt');
 let request = require('supertest');
+let jwt = require('jsonwebtoken');
 
 let Usuario = require('./usuarios.model');
 let app = require('../../../index').app;
 let server = require('../../../index').server;
+let config = require('../../../config');
 
 let dummyUsuarios = [
     {
@@ -293,7 +295,139 @@ describe('Usuarios', () => {
                         password: usuario.password,
                     }, done);
                 });
-        })
+        });
+
+    });
+
+    describe('POST /usuarios/login', () => {
+        test('Login debería fallar para un request que no tiene username', (done) => {
+            let bodyLogin = {
+                password: 'holaholahola',
+            };
+
+            request(app)
+                .post('/usuarios/login')
+                .send(bodyLogin)
+                .end((err, res) => {
+                    expect(res.status).toBe(400);
+                    expect(typeof res.text).toBe('string');
+                    done();
+                })
+        });
+
+        test('Login debería fallar para un request que no tiene password', (done) => {
+            let bodyLogin = {
+                username: 'noexisto',
+            };
+
+            request(app)
+                .post('/usuarios/login')
+                .send(bodyLogin)
+                .end((err, res) => {
+                    expect(res.status).toBe(400);
+                    expect(typeof res.text).toBe('string');
+                    done();
+                });
+        });
+
+        test('Login debería fallar para un usuario que no está registrado', (done) => {
+            let bodyLogin = {
+                username: 'noexisto',
+                password: 'holaholahola',
+            };
+
+            request(app)
+                .post('/usuarios/login')
+                .send(bodyLogin)
+                .end((err, res) => {
+                    expect(res.status).toBe(400);
+                    expect(typeof res.text).toBe('string')
+                    done();
+                });
+        });
+
+        test('Login debería fallar para un usuario registrado que suministra una contraseña incorrecta', (done) => {
+            let usuario = {
+                username: 'samuel',
+                email: 'samuel@gmail.com',
+                password: 'perrosamarillos',
+            };
+
+            new Usuario({
+                username: usuario.username,
+                email: usuario.email,
+                password: bcrypt.hashSync(usuario.password, 10),
+            }).save().then(nnuevoUsuario => {
+                request(app)
+                    .post('/usuarios/login')
+                    .send({
+                        username: usuario.username,
+                        password: 'arrozverde',
+                    })
+                    .end((err, res) => {
+                        expect(res.status).toBe(400);
+                        expect(typeof res.text).toBe('string');
+                        done();
+                    })
+            })
+                .catch(err => done(err))
+        });
+
+        test('Usuario registrado debería obtener un JWT token al hacer login con credenciales correctas', (done) => {
+            let usuario = {
+                username: 'samuel',
+                email: 'samuel@gmail.com',
+                password: 'perrosamarillos',
+            };
+
+            new Usuario({
+                username: usuario.username,
+                email: usuario.email,
+                password: bcrypt.hashSync(usuario.password, 10),
+            }).save().then(nuevoUsuario => {
+                request(app)
+                    .post('/usuarios/login')
+                    .send({
+                        username: usuario.username,
+                        password: usuario.password,
+                    })
+                    .end((err, res) => {
+                        expect(res.status).toBe(200);
+                        expect(res.body.token).toEqual(jwt.sign({ id: nuevoUsuario._id }, config.jwt.secreto, {
+                            expiresIn: config.jwt.tiempoDeExpiracion
+                        }));
+                        done();
+                    });
+            }).catch(err => done(err));
+        });
+
+        test('Al hacer login no debe importar la capitalización del username', (done) => {
+            let usuario = {
+                username: 'samuel',
+                email: 'samuel@gmail.com',
+                password: 'perrosamarillos',
+            };
+
+            new Usuario({
+                username: usuario.username,
+                email: usuario.email,
+                password: bcrypt.hashSync(usuario.password, 10),
+            }).save().then(nuevoUsuario => {
+                request(app)
+                    .post('/usuarios/login')
+                    .send({
+                        username: 'SaMUEl',
+                        password: usuario.password,
+                    })
+                    .end((err, res) => {
+                        expect(res.status).toBe(200);
+                        expect(res.body.token).toEqual(jwt.sign({ id: nuevoUsuario._id }, config.jwt.secreto, {
+                            expiresIn: config.jwt.tiempoDeExpiracion
+                        }));
+                        done();
+                    })
+            })
+        });
 
     });
 
