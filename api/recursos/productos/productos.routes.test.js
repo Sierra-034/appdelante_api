@@ -177,4 +177,91 @@ describe('Productos', () => {
                 })
         });
     });
+
+    describe('DELETE /productos/:id', () => {
+        let idDeProductoExistente;
+
+        beforeAll(obtenerToken);
+
+        beforeEach(done => {
+            Producto.remove({}, (err) => {
+                if (err) done(err);
+                Producto(productoYaEnBaseDeDatos).save()
+                    .then(producto => {
+                        idDeProductoExistente = producto._id;
+                        done();
+                    })
+                    .catch(err => done(err));
+            })
+        });
+
+        test('Tratar de borrar un producto con un id inválido debería retornar 400', done => {
+            request(app)
+                .delete('/productos/123')
+                .set('Authorization', `Bearer ${authToken}`)
+                .end((err, res) => {
+                    expect(res.status).toBe(400);
+                    done();
+                })
+        });
+
+        test('Tratar de borrar un producto que no existe debería retornar 404', done => {
+            request(app)
+                .delete(`/productos/${idInexistente}`)
+                .set('Authorization', `Bearer ${authToken}`)
+                .end((err, res) => {
+                    expect(res.status).toBe(404);
+                    done();
+                });
+        });
+
+        test('Si el usuario no provee un token de autenticación vpalido, debería retornar 401', done => {
+            request(app)
+                .delete(`/productos/${idDeProductoExistente}`)
+                .set('Authorization', `Bearer ${tokenInvalido}`)
+                .end((err, res) => {
+                    expect(res.status).toBe(401);
+                    done();
+                });
+        });
+
+        test('Si el usuario no es el dueño del producto, debería retornar 401', done => {
+            Producto({
+                titulo: 'Adidas Gazelle',
+                precio: 90,
+                moneda: 'USD',
+                dueño: 'someUser',
+            }).save()
+                .then(producto => {
+                    request(app)
+                        .delete(`/productos/${producto._id}`)
+                        .set('Authorization', `Bearer ${authToken}`)
+                        .end((err, res) => {
+                            expect(res.status).toBe(401);
+                            expect(res.text.includes('No eres dueño del producto con id')).toBe(true);
+                            done();
+                        })
+                })
+                .catch(err => done(err));
+        });
+
+        test('Si el usuario es dueño del producto y entrega un token válido, el producto debería ser borrado', done => {
+            request(app)
+                .delete(`/productos/${idDeProductoExistente}`)
+                .set('Authorization', `Bearer ${authToken}`)
+                .end((err, res) => {
+                    expect(res.status).toBe(200);
+                    expect(res.body.titulo).toEqual(productoYaEnBaseDeDatos.titulo);
+                    expect(res.body.precio).toEqual(productoYaEnBaseDeDatos.precio);
+                    expect(res.body.moneda).toEqual(productoYaEnBaseDeDatos.moneda);
+                    expect(res.body.dueño).toEqual(productoYaEnBaseDeDatos.dueño);
+                    Producto.findById(idDeProductoExistente)
+                        .then(producto => {
+                            expect(producto).toBeNull();
+                            done();
+                        })
+                        .catch(err => done(err));
+                })
+        });
+    });
 });
