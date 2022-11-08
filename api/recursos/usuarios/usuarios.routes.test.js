@@ -1,6 +1,7 @@
 let bcrypt = require('bcrypt');
 let request = require('supertest');
 let jwt = require('jsonwebtoken');
+let mongoose = require('mongoose');
 
 let Usuario = require('./usuarios.model');
 let app = require('../../../index').app;
@@ -55,11 +56,12 @@ async function usuarioNoExiste(usuario, done) {
 describe('Usuarios', () => {
 
     beforeEach((done) => {
-        Usuario.remove({}, (error) => done());
+        Usuario.deleteMany({}, (error) => done());
     });
 
-    afterAll(() => {
+    afterAll(async () => {
         server.close();
+        await mongoose.disconnect();
     });
 
     describe('GET /usuarios', () => {

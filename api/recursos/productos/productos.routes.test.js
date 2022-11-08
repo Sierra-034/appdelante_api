@@ -1,6 +1,7 @@
 let bcrypt = require('bcrypt');
 let jwt = require('jsonwebtoken');
 let request = require('supertest');
+let mongoose = require('mongoose');
 
 let config = require('../../../config');
 let Producto = require('./productos.model');
@@ -36,7 +37,7 @@ let tokenInvalido =
 function obtenerToken(done) {
     // Antes de este bloque de tests creamos un usuario y obtenemos
     // su JWT token. Esto nos permitirá testear rutas que requieren autenticación.
-    Usuario.remove({}, err => {
+    Usuario.deleteMany({}, err => {
         if (err) done(err)
         request(app)
             .post('/usuarios')
@@ -60,11 +61,12 @@ function obtenerToken(done) {
 
 describe('Productos', () => {
     beforeEach((done) => {
-        Producto.remove({}, err => done());
+        Producto.deleteMany({}, err => done());
     });
 
-    afterAll(() => {
+    afterAll(async () => {
         server.close();
+        await mongoose.disconnect();
     });
 
     describe('GET /productos/:id', () => {
@@ -185,7 +187,7 @@ describe('Productos', () => {
         beforeAll(obtenerToken);
 
         beforeEach(done => {
-            Producto.remove({}, (err) => {
+            Producto.deleteMany({}, (err) => {
                 if (err) done(err);
                 Producto(productoYaEnBaseDeDatos).save()
                     .then(producto => {
@@ -315,7 +317,7 @@ describe('Productos', () => {
         beforeAll(obtenerToken);
 
         beforeEach(done => {
-            Producto.remove({}, (err) => {
+            Producto.deleteMany({}, (err) => {
                 if (err) done(err);
                 Producto(productoYaEnBaseDeDatos).save()
                     .then(producto => {

@@ -11,7 +11,6 @@ const config = require('./config');
 const errorHandler = require('./api/libs/errorHandler');
 
 const passport = require('passport');
-const authJWT = require('./api/libs/auth');
 
 passport.use(authJWT);
 
@@ -27,7 +26,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(morgan('short', {
     stream: {
-        write: message => logger.info(message.trim())
+        write: message => logger.info(message)
     }
 }));
 
