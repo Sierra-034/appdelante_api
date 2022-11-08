@@ -6,6 +6,7 @@ const configuracionBase = {
     jwt: {},
     puerto: server_port,
     mongo: db_connection_string,
+    suprimirLogs: false,
 };
 
 let configuracionDeAmbiente = {};
@@ -20,6 +21,9 @@ switch (ambiente) {
     case 'prod':
     case 'production':
         configuracionDeAmbiente = require('./prod');
+        break;
+    case 'test':
+        configuracionDeAmbiente = require('./test');
         break;
     default:
         configuracionDeAmbiente = require('./dev');
