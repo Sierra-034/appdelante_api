@@ -178,6 +178,137 @@ describe('Productos', () => {
         });
     });
 
+    describe('PUT /productos/:id', () => {
+
+        let idDeProductoExistente;
+
+        beforeAll(obtenerToken);
+
+        beforeEach(done => {
+            Producto.remove({}, (err) => {
+                if (err) done(err);
+                Producto(productoYaEnBaseDeDatos).save()
+                    .then(producto => {
+                        idDeProductoExistente = producto._id;
+                        done();
+                    }).catch(done);
+            });
+        });
+
+        test(
+            'Si el usuario proporciona un id de producto válido, \
+            un token válido y un producto válido, debería retornar 200',
+            done => {
+                request(app)
+                    .put(`/productos/${idDeProductoExistente}`)
+                    .set('Authorization', `Bearer ${authToken}`)
+                    .send(nuevoProducto)
+                    .end((err, res) => {
+                        expect(res.status).toBe(200);
+                        expect(res.body.titulo).toEqual(nuevoProducto.titulo);
+                        expect(res.body.precio).toEqual(nuevoProducto.precio);
+                        expect(res.body.moneda).toEqual(nuevoProducto.moneda);
+                        expect(res.body.dueño).toEqual(testUsuario.username);
+                        done();
+                    });
+            });
+
+        test('Si el usuario proporciona un token inválido, debería retornar 401', done => {
+            request(app)
+                .put(`/productos/${idDeProductoExistente}`)
+                .set('Authorization', `Bearer ${tokenInvalido}`)
+                .end((err, res) => {
+                    expect(res.status).toBe(401);
+                    done();
+                });
+        });
+
+        test('Si el usuario proporciona un id de producto inválido, debería retornar 400', done => {
+            request(app)
+                .put('/productos/123')
+                .set('Authorization', `Bearer ${authToken}`)
+                .send(nuevoProducto)
+                .end((err, res) => {
+                    expect(res.status).toBe(400);
+                    done();
+                });
+        });
+
+        test('Si el usuario proporciona un id de producto inexistenten, debería retornar 404', done => {
+            request(app)
+                .put(`/productos/${idInexistente}`)
+                .set('Authorization', `Bearer ${authToken}`)
+                .send(nuevoProducto)
+                .end((err, res) => {
+                    expect(res.status).toBe(404);
+                    done();
+                });
+        });
+
+        test('Si el usuario proporciona un producto sin título, debería retornar 400', done => {
+            request(app)
+                .put(`/productos/${idDeProductoExistente}`)
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({
+                    precio: nuevoProducto.precio,
+                    moneda: nuevoProducto.moneda,
+                })
+                .end((err, res) => {
+                    expect(res.status).toBe(400);
+                    done();
+                });
+        });
+
+        test('Si el usuario proporciona un producto sin precio, debería retornar 400', done => {
+            request(app)
+                .put(`/productos/${idDeProductoExistente}`)
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({
+                    titulo: nuevoProducto.titulo,
+                    moneda: nuevoProducto.moneda,
+                })
+                .end((err, res) => {
+                    expect(res.status).toBe(400);
+                    done();
+                });
+        });
+
+        test('Si el usuario proporciona un producto sin moneda, debería retornar 400', done => {
+            request(app)
+                .put(`/productos/${idDeProductoExistente}`)
+                .set('Authorization', `Bearer ${authToken}`)
+                .send({
+                    titulo: nuevoProducto.titulo,
+                    precio: nuevoProducto.precio,
+                })
+                .end((err, res) => {
+                    expect(res.status).toBe(400);
+                    done();
+                });
+        });
+
+        test('Si el usuario no es el dueño del producto, debería retornar 401', done => {
+            Producto({
+                titulo: 'Adidas Gazelle',
+                precio: 90,
+                moneda: 'USD',
+                dueño: 'someUser',
+            }).save()
+                .then(producto => {
+                    request(app)
+                        .put(`/productos/${producto._id}`)
+                        .set('Authorization', `Bearer ${authToken}`)
+                        .send(nuevoProducto)
+                        .end((err, res) => {
+                            expect(res.status).toBe(401);
+                            done();
+                        });
+
+                }).catch(done);
+        });
+
+    });
+
     describe('DELETE /productos/:id', () => {
         let idDeProductoExistente;
 
@@ -215,7 +346,7 @@ describe('Productos', () => {
                 });
         });
 
-        test('Si el usuario no provee un token de autenticación vpalido, debería retornar 401', done => {
+        test('Si el usuario no provee un token de autenticación válido, debería retornar 401', done => {
             request(app)
                 .delete(`/productos/${idDeProductoExistente}`)
                 .set('Authorization', `Bearer ${tokenInvalido}`)
