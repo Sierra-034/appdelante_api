@@ -57,7 +57,7 @@ productosRouter.put(
         productoReemplazar = await productosController.obtenerProducto(id);
 
         if (!productoReemplazar) {
-            throw new ProductNoExiste(`El producto con id [${id}] no existe`)
+            throw new ProductoNoExiste(`El producto con id [${id}] no existe`)
         }
 
         if (productoReemplazar.dueño !== requestUsuario) {
@@ -95,7 +95,7 @@ productosRouter.delete(
 
         if (!productoBorrar) {
             logger.info(`Producto con id [${id}] no existe. Nada que borrar.`);
-            throw new ProductNoExiste(`Producto con id [${id}] no existe. Nada que borrar`);
+            throw new ProductoNoExiste(`Producto con id [${id}] no existe. Nada que borrar`);
         }
 
         let usuarioAutenticado = request.user.username;
