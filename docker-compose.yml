@@ -14,7 +14,7 @@ services:
       - NODE_ENV=test
       - MONGO_DB_CONNECTION=mongodb://mongo:27017/appdelante
     volumes:
-      - ./:/app:ro
+      - ./:/app
       - /app/node_modules
     # command: npm run debug
 
