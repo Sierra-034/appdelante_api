@@ -1,7 +1,6 @@
 const Producto = require('./productos.model');
 
 function crearProducto(producto, dueño) {
-	return Promise.reject("Falla forzada");
     return new Producto({
         ...producto,
         dueño

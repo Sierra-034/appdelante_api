@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --forceExit --watchAll --runInBand",
     "debug": "nodemon --inspect=0.0.0.0:9229 index.js"
   },
   "author": "Samuel Gómez",

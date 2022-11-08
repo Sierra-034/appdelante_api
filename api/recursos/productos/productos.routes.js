@@ -4,7 +4,7 @@ const validators = require('./productos.validate');
 const logger = require('../../../utils/logger');
 const productosController = require('./productos.controller');
 const procesarErrores = require('../../libs/errorHandler').procesarErrores;
-const { ProductNoExiste, UsuarioNoEsDueño } = require('./productos.error');
+const { ProductoNoExiste, UsuarioNoEsDueño } = require('./productos.error');
 
 const jwtAuthenticate = passport.authenticate('jwt', { session: false });
 const productosRouter = express.Router();
@@ -38,9 +38,10 @@ productosRouter.get(
         let id = request.params.id;
         return productosController.obtenerProducto(id)
             .then(producto => {
-                if (!producto) throw new ProductNoExiste(
-                    `Producto con id [${id}] no existe`
-                );
+                if (!producto) {
+                    logger.warn(`No existe producto`);
+                    throw new ProductoNoExiste(`Producto con id [${id}] no existe`);
+                }
                 response.status(200).json(producto);
             });
     }));
