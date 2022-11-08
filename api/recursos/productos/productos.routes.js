@@ -48,7 +48,11 @@ productosRouter.get(
 
 productosRouter.put(
     "/:id",
-    [jwtAuthenticate, validators.validateProduct],
+    [
+        jwtAuthenticate,
+        validators.validateId,
+        validators.validateProduct,
+    ],
     procesarErrores(async (request, response) => {
 
         let id = request.params.id;
