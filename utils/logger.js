@@ -1,14 +1,25 @@
 const winston = require('winston');
+const config = require('../config');
 
 const incluirFecha = winston.format((info) => {
     info.message = `${new Date().toISOString()} ${info.message}`;
     return info;
 })
 
+/*
+    Niveles de Logs:
+    error: 0
+    warn: 1
+    info: 2
+    verbose: 3
+    debug: 4
+    silly: 5
+*/
+
 module.exports = winston.createLogger({
     transports: [
         new winston.transports.Console({
-            level: 'debug',
+            level: config.suprimirLogs ? 'error' : 'debug',
             handleExceptions: true,
             format: winston.format.combine(
                 winston.format.colorize(),
