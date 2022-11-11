@@ -4,21 +4,25 @@ services:
   appdelante:
     build:
       context: .
-      target: test
+      target: dev
+    profiles:
+      - dev
     ports:
       - 3000:3000
       - 9229:9229
     environment:
       - SECRET_KEY
       - SERVER_PORT=3000
-      - NODE_ENV=test
+      - NODE_ENV=dev
       - MONGO_DB_CONNECTION=mongodb://mongo:27017/appdelante
     volumes:
       - ./:/app
       - /app/node_modules
-    # command: npm run debug
+    command: npm run debug
 
   mongo:
+    profiles:
+      - dev
     image: mongo:4.2.8
     ports:
       - 27017:27017
@@ -26,6 +30,33 @@ services:
       - mongodb:/data/db
       - mongodb_config:/data/configdb
 
+  appdelante-test:
+    build:
+      context: .
+      target: test
+    profiles:
+      - test
+    ports:
+      - 3000:3000
+    environment:
+      - SECRET_KEY=testingsecret
+      - SERVER_PORT=3000
+      - NODE_ENV=test
+      - MONGO_DB_CONNECTION=mongodb://mongo-test:27017/appdelante-test
+
+  mongo-test:
+    profiles:
+      - test
+    image: mongo:4.2.8
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb-test:/data/db
+      - mongodb_config-test:/data/configdb
+
+      
 volumes:
   mongodb :
   mongodb_config:
+  mongodb-test:
+  mongodb_config-test:
